@@ -43,4 +43,10 @@ void *operator new[](size_t sz, void *ptr)
     return ptr;
 }
 
+template<typename Ty>
+constexpr auto right_value_type(Ty &e) noexcept -> Ty&&
+{
+    return static_cast<Ty&&>(e);
+}
+
 #endif //# __INT_BASIC_NEW_HPP__ ends

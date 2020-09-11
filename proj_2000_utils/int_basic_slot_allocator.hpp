@@ -21,6 +21,8 @@ const s64 slot_allocator_default_cap = 4LL;
 template<s64 DataSz>
 class slot_allocator
 {
+    using Self_Ty = slot_allocator<DataSz>;
+
     template<s64 SlotDataSz>
     struct _slot
     {
@@ -87,7 +89,48 @@ public:
         }
     }
 
-    ~slot_allocator()
+    slot_allocator(Self_Ty &&rhs) noexcept :
+        size(rhs.size),
+        cap(rhs.cap)
+    {
+        slot_head.prev = rhs.slot_head.prev;
+        slot_head.next = rhs.slot_head.next;
+        block_head = rhs.block_head;
+
+        rhs.size = 0;
+        rhs.cap = 0;
+        rhs.slot_head.prev = nullptr;
+        rhs.slot_head.next = nullptr;
+        rhs.block_head = nullptr;
+    }
+
+    Self_Ty &operator =(Self_Ty &&rhs) noexcept
+    {
+        _block<DataSz> *blk = block_head;
+        while (blk)
+        {
+            _block<DataSz> *blk_next = blk->next;
+            memory_free(pointer_convert(blk, 0, void*));
+            blk = blk_next;
+        }
+
+        size = rhs.size;
+        cap = rhs.cap;
+        slot_head.prev = rhs.slot_head.prev;
+        slot_head.next = rhs.slot_head.next;
+        slot_head.prev->next = &slot_head;
+        slot_head.next->prev = &slot_head;
+        block_head = rhs.block_head;
+
+        rhs.size = 0;
+        rhs.cap = 0;
+        rhs.slot_head.prev = nullptr;
+        rhs.slot_head.next = nullptr;
+        rhs.block_head = nullptr;
+        return *this;
+    }
+
+    ~slot_allocator() noexcept
     {
         _block<DataSz> *blk = block_head;
         while (blk)
@@ -98,7 +141,7 @@ public:
         }
     }
 
-    void *get()
+    void *get() noexcept
     {
         if (size == 0)
         {
@@ -115,7 +158,7 @@ public:
         return pointer_convert(slot, 0, void*);
     }
 
-    void put(void *p)
+    void put(void *p) noexcept
     {
         _slot<DataSz> *slot = pointer_convert(p, 0, _slot<DataSz>*);
         slot->prev = slot_head.prev;
@@ -130,6 +173,8 @@ private:
     void append_block(s64 block_sz)
     {
         _block<DataSz> *new_block = pointer_convert(memory_alloc(sizeof(_block<DataSz>) + sizeof(_slot<DataSz>) * block_sz), 0, _block<DataSz>*);
+        assert(new_block);
+        new_block->slots_cnt = block_sz;
 
         for (s64 i = 0; i != block_sz; ++i)
         {

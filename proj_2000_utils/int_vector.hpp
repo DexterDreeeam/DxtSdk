@@ -475,6 +475,33 @@ public:
         return elem[pos];
     }
 
+    bool operator ==(const Self_Ty &rhs) const noexcept
+    {
+        assert(sz >= 0 && sz <= cap);
+        if (this == &rhs)
+        {
+            return true;
+        }
+        if (sz != rhs.sz)
+        {
+            return false;
+        }
+        for (s64 i = 0, n = sz; i != n; ++i)
+        {
+            if (elem[i] != rhs.elem[i])
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    bool operator !=(const Self_Ty &rhs) const noexcept
+    {
+        assert(sz >= 0 && sz <= cap);
+        return !(*this == rhs);
+    }
+
     Ty *data() noexcept
     {
         assert(sz > 0 && sz <= cap);
@@ -487,13 +514,19 @@ public:
         return elem;
     }
 
-    const s64 size() const
+    s64 size() const noexcept
     {
         assert(sz >= 0 && sz <= cap);
         return sz;
     }
 
-    const s64 capacity() const
+    bool empty() const noexcept
+    {
+        assert(sz >= 0 && sz <= cap);
+        return sz == 0;
+    }
+
+    const s64 capacity() const noexcept
     {
         assert(sz >= 0 && sz <= cap);
         return cap;
@@ -523,7 +556,7 @@ public:
         return elem[sz - 1];
     }
 
-    void push_back(const Ty &one)
+    void push_back(const Ty &one) noexcept
     {
         assert(sz >= 0 && sz <= cap);
         _need_space(1);
@@ -531,12 +564,20 @@ public:
         ++sz;
     }
 
-    void push_back(Ty &&one)
+    void push_back(Ty &&one) noexcept
     {
         assert(sz >= 0 && sz <= cap);
         _need_space(1);
         new (&elem[sz]) Ty(one);
         ++sz;
+    }
+
+    template<typename ...Args>
+    void push_back(Args... args) noexcept
+    {
+        assert(sz >= 0 && sz <= cap);
+        _need_space(sizeof...(args));
+        _push_back_tuple(args...);
     }
 
     void pop_back() noexcept
@@ -544,14 +585,6 @@ public:
         assert(sz > 0 && sz <= cap);
         --sz;
         (&elem[sz])->~Ty();
-    }
-
-    template<typename ...Args>
-    void push_back(Args... args)
-    {
-        assert(sz >= 0 && sz <= cap);
-        _need_space(sizeof...(args));
-        _push_back_tuple(args...);
     }
 
     template<typename ...Args>
@@ -586,7 +619,7 @@ public:
         }
     }
 
-    void erase(s64 pos, s64 erase_cnt)
+    void erase(s64 pos, s64 erase_cnt) noexcept
     {
         assert(sz >= 0 && sz <= cap);
         assert(pos >= 0 && pos < sz);
@@ -631,7 +664,7 @@ public:
         }
     }
 
-    void resize(s64 new_sz, const Ty &val)
+    void resize(s64 new_sz, const Ty &val) noexcept
     {
         assert(sz >= 0 && sz <= cap);
         assert(new_sz >= 0);
@@ -703,7 +736,7 @@ public:
     }
 
 private:
-    static s64 _ceil_align(s64 len)
+    static s64 _ceil_align(s64 len) noexcept
     {
         return ceil(len, vector_unit_extent);
     }
@@ -715,16 +748,16 @@ private:
         _construct_tuple(args...);
     }
 
-    void _construct_tuple(const Ty &last)
-    {
-        new (&elem[sz - 1]) Ty(last);
-    }
-
     template<typename ...Args>
     void _construct_tuple(Ty &&first, Args...args)
     {
         new (&elem[sz - sizeof...(args) - 1]) Ty(first);
         _construct_tuple(args...);
+    }
+
+    void _construct_tuple(const Ty &last)
+    {
+        new (&elem[sz - 1]) Ty(last);
     }
 
     void _construct_tuple(Ty &&last)
@@ -772,28 +805,28 @@ private:
     }
 
     template<typename ...Args>
-    void _push_back_tuple(const Ty &first, Args...args)
+    void _push_back_tuple(const Ty &first, Args...args) noexcept
     {
         new (&elem[sz]) Ty(first);
         ++sz;
         _push_back_tuple(args...);
     }
 
-    void _push_back_tuple(const Ty &last)
+    void _push_back_tuple(const Ty &last) noexcept
     {
         new (&elem[sz]) Ty(last);
         ++sz;
     }
 
     template<typename ...Args>
-    void _push_back_tuple(Ty &&first, Args...args)
+    void _push_back_tuple(Ty &&first, Args...args) noexcept
     {
         new (&elem[sz]) Ty(first);
         ++sz;
         _push_back_tuple(args...);
     }
 
-    void _push_back_tuple(Ty &&last)
+    void _push_back_tuple(Ty &&last) noexcept
     {
         new (&elem[sz]) Ty(last);
         ++sz;

@@ -22,6 +22,7 @@
 
 #include "int_array.hpp"
 #include "int_vector.hpp"
+#include "int_list.hpp"
 #include "int_stack.hpp"
 #include "int_set.hpp"
 #include "int_unordered_set.hpp"
