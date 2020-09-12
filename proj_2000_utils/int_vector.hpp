@@ -357,8 +357,13 @@ const s64 vector_unit_extent = 4LL;
 const s64 vector_cap_max = 1LL << 30;
 
 template<typename Ty>
+class stack;
+
+template<typename Ty>
 class vector
 {
+    friend class stack<Ty>;
+
     using Self_Ty = vector<Ty>;
     using Data_Ty = Ty;
     using Iter_Ty = vector_iter<Self_Ty>;
@@ -733,6 +738,17 @@ public:
     {
         assert(sz >= 0 && sz <= cap);
         return cRitr_Ty(pointer_convert(elem, -(s64)sizeof(Ty), Ty*));
+    }
+
+    Iter_Ty find(const Ty &e)
+    {
+        Iter_Ty itr = begin();
+        const Iter_Ty eitr = end();
+        while (itr != eitr && *itr != e)
+        {
+            ++itr;
+        }
+        return itr;
     }
 
 private:

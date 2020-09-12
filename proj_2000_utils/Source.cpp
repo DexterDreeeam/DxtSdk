@@ -5,34 +5,30 @@ using namespace std;
 int main()
 {
 
-    list<int> l2;
+    stack<int> stk = { 1,2,3,4,5,6 };
+
+    for (int i : stk)
     {
-        list<int> l1 = { 100, 1000 };
-        l1.push_front(1,2,3,4,5,6,7);
-
-        //while (l1.size())
-        //{
-        //    print("%d\n", l1.front());
-        //    l1.pop_front();
-        //}
-
-        print("///////////////////");
-
-        l2 = right_value_type(l1);
-
-        print("///////////////////\n");
-        while (l1.size())
-        {
-            print("%d\n", l1.front());
-            l1.pop_front();
-        }
-
+        print("%d\n", i);
     }
-    print("///////////////////\n");
-    while (l2.size())
+
+    stk.push(7);
+    stk.push(8, 9);
+
+    print("---------------------------\n");
+
+    auto stk2 = stk;
+
+    for (int i : stk)
     {
-        print("%d\n", l2.front());
-        l2.pop_front();
+        print("%d\n", i);
+    }
+
+    print("---------------------------\n");
+
+    for (int i : stk2)
+    {
+        print("%d\n", i);
     }
 
     //for (int i = 0; i < vec2.size(); ++i)

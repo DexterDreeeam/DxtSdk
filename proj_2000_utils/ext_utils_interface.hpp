@@ -20,6 +20,7 @@
 #include "int_basic_hashmap.hpp"
 #include "int_basic_rbtree.hpp"
 
+#include "int_pair.hpp"
 #include "int_array.hpp"
 #include "int_vector.hpp"
 #include "int_list.hpp"
