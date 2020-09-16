@@ -200,7 +200,7 @@ _INLINE_ u64 tick_elapse()
 
 _INLINE_ void  tick_elapse_print()
 {
-    print("Time elapse is: %llu.\n", tick_elapse());
+    print("Time elapse is: %llums.\n", tick_elapse());
 }
 
 _INLINE_ lock lock_create(void)

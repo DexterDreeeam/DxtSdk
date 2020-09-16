@@ -4,67 +4,41 @@ using namespace std;
 
 int main()
 {
-
-    stack<int> stk = { 1,2,3,4,5,6 };
-
-    for (int i : stk)
-    {
-        print("%d\n", i);
-    }
-
-    stk.push(7);
-    stk.push(8, 9);
-
-    print("---------------------------\n");
-
-    auto stk2 = stk;
-
-    for (int i : stk)
-    {
-        print("%d\n", i);
-    }
-
-    print("---------------------------\n");
-
-    for (int i : stk2)
-    {
-        print("%d\n", i);
-    }
-
-    vector<int> cands = { 1,5,2,3,3,9,4,7,8,6 };
-
     tick_start();
 
-    vector<int> vec;
+    map<int, int> mm;
+    mm.insert(1, 1);
+    mm.insert(make_pair(2,4));
+    mm.insert(8LL, -1);
 
-    set<int> ss;
+    mm[8] = 10000;
+    mm[-800] = 0;
+    mm[100000];
 
-    ss.insert(10000);
-    ss.insert(-1);
+    mm.erase(8);
+    mm.erase(mm.find(1));
 
-    ss.clear();
+    pair<int, long long> p = make_pair(-1, 0.0);
 
-    for (int i = 0; i <= 1000; ++i)
+    print("map size is : %d\n", mm.size());
+
+    for (auto itr = mm.begin(); itr != mm.end(); ++itr)
     {
-        ss.insert(i);
+        print("itr->first : %d, itr->second : %d.\n", itr->first, itr->second);
     }
 
-    for (int i = 2; i < 1000; i += 2)
+    tick_elapse_print();
+
+    queue<int> q = { 2,3,4 };
+    for (int i = 100; i < 150; ++i)
     {
-        auto itr = ss.find(i);
-        ss.erase(itr);
+        q.push(i);
     }
 
-    print("---------------------------\n");
-
-    for (auto itr = ss.cbegin(); itr != ss.cend(); ++itr)
+    while (q.size())
     {
-        print("%d\n", *itr);
-    }
-
-    for (int i = 0; i <= 1000; ++i)
-    {
-        ss.erase(i);
+        print("%d\n", q.front());
+        q.pop();
     }
 
     tick_elapse_print();

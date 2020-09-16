@@ -103,6 +103,12 @@ public:
         return *data;
     }
 
+    s64 operator -(const Self_Ty &rhs) const noexcept
+    {
+        s64 diff = reinterpret_cast<s64>(data) - reinterpret_cast<s64>(rhs.data);
+        return diff / sizeof(Data_Ty);
+    }
+
 private:
     vector_iter(Data_Ty *ptr) :
         data(ptr)
@@ -691,6 +697,16 @@ public:
         }
     }
 
+    void swap(s64 pos1, s64 pos2) noexcept
+    {
+        assert(0 <= pos1 && pos1 < sz);
+        assert(0 <= pos2 && pos2 < sz);
+        u8 buf[sizeof(Ty)];
+        memory_copy(pointer_convert(elem, sizeof(Ty) * pos1, void*), buf, sizeof(Ty));
+        memory_copy(pointer_convert(elem, sizeof(Ty) * pos2, void*), pointer_convert(elem, sizeof(Ty) * pos1, void*), sizeof(Ty));
+        memory_copy(buf, pointer_convert(elem, sizeof(Ty) * pos2, void*), sizeof(Ty));
+    }
+
     Iter_Ty begin() noexcept
     {
         assert(sz >= 0 && sz <= cap);
@@ -750,10 +766,47 @@ public:
         return itr;
     }
 
+    template<typename Cmp_Op>
+    void sort(s64 head_idx, s64 tail_idx, const Cmp_Op &op) noexcept
+    {
+        assert_info(0 <= head_idx && head_idx <= tail_idx && tail_idx < sz, "Sort() need valid index number.");
+        _quick_sort(head_idx, tail_idx, op);
+    }
+
+    void sort(s64 head_idx, s64 tail_idx) noexcept
+    {
+        assert_info(0 <= head_idx && head_idx <= tail_idx && tail_idx < sz, "Sort() need valid index number.");
+        sort(head_idx, tail_idx, _default_cmp_op);
+    }
+
+    template<typename Cmp_Op>
+    void sort(const Cmp_Op &op) noexcept
+    {
+        if (sz == 0)
+        {
+            return;
+        }
+        sort(0, sz - 1, op);
+    }
+
+    void sort() noexcept
+    {
+        if (sz == 0)
+        {
+            return;
+        }
+        sort(0, sz - 1, _default_cmp_op);
+    }
+
 private:
     static s64 _ceil_align(s64 len) noexcept
     {
         return ceil(len, vector_unit_extent);
+    }
+
+    static bool _default_cmp_op(const Ty &e1, const Ty &e2) noexcept
+    {
+        return e1 < e2;
     }
 
     template<typename ...Args>
@@ -845,6 +898,29 @@ private:
     {
         new (&elem[sz]) Ty(last);
         ++sz;
+    }
+
+    template<typename Cmp_Op>
+    void _quick_sort(s64 head_idx, s64 tail_idx, const Cmp_Op &op) noexcept
+    {
+        if (head_idx >= tail_idx)
+        {
+            return;
+        }
+        s64 idx = head_idx;
+        s64 less_before_idx = head_idx;
+        while (idx < tail_idx)
+        {
+            if (op(elem[idx], elem[tail_idx]))
+            {
+                swap(less_before_idx, idx);
+                ++less_before_idx;
+            }
+            ++idx;
+        }
+        swap(less_before_idx, tail_idx);
+        _quick_sort(head_idx, less_before_idx - 1, op);
+        _quick_sort(less_before_idx + 1, tail_idx, op);
     }
 
 private:

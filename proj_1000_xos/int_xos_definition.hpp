@@ -99,7 +99,7 @@ typedef enum : s32
 
 _INLINE_ boole is_success(RET rt)
 {
-    return rt > 0L ? true : false;
+    return rt > 0L ? boole_true : boole_false;
 }
 
 _INLINE_ _NOALIAS_ s64 str_len(const char *s)
@@ -118,12 +118,12 @@ _INLINE_ _NOALIAS_ boole str_equal(const char *s1, const char *s2)
     {
         if (*s1 == '\0')
         {
-            return true;
+            return boole_true;
         }
         ++s1;
         ++s2;
     }
-    return false;
+    return boole_false;
 }
 
 #endif //# __INT_XOS_DEFINITION_HPP__ ends

@@ -56,6 +56,42 @@ public:
         second(right_value_type(rhs.second))
     {}
 
+    template<typename Ty3, typename Ty4>
+    pair(const Ty3 &e1, const Ty4 &e2) :
+        first(e1),
+        second(e2)
+    {}
+
+    template<typename Ty3>
+    pair(const Ty3 &e1) :
+        first(e1),
+        second()
+    {}
+
+    template<typename Ty3, typename Ty4>
+    pair(const pair<Ty3, Ty4> &rhs) :
+        first(rhs.first),
+        second(rhs.second)
+    {}
+
+    template<typename Ty3, typename Ty4>
+    pair(const pair<const Ty3, Ty4> &rhs) :
+        first(rhs.first),
+        second(rhs.second)
+    {}
+
+    template<typename Ty3, typename Ty4>
+    pair(const pair<Ty3, const Ty4> &rhs) :
+        first(rhs.first),
+        second(rhs.second)
+    {}
+
+    template<typename Ty3, typename Ty4>
+    pair(const pair<const Ty3, const Ty4> &rhs) :
+        first(rhs.first),
+        second(rhs.second)
+    {}
+
     ~pair() noexcept
     {}
 
@@ -87,6 +123,18 @@ public:
     Ty1 first;
     Ty2 second;
 };
+
+template<typename Ty1, typename Ty2>
+pair<Ty1, Ty2> make_pair(const Ty1 &e1, const Ty2 &e2) noexcept
+{
+    return pair<Ty1, Ty2>(e1, e2);
+}
+
+template<typename Ty1, typename Ty2>
+pair<Ty1, Ty2> make_pair(Ty1 &&e1, Ty2 &&e2) noexcept
+{
+    return pair<Ty1, Ty2>(e1, e2);
+}
 
 END_NS(std)
 
