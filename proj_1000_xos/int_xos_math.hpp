@@ -16,10 +16,9 @@
 #pragma warning (push)
 #pragma warning (disable : 4005)
 
-namespace windows_ns
-{
+START_NS(windows_ns)
 #include <math.h>
-}
+END_NS(windows_ns)
 
 #include "int_xos_math_impl.hpp"
 

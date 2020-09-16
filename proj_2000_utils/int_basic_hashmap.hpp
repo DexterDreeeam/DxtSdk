@@ -13,9 +13,10 @@
 #if !defined (__INT_BASIC_HASHMAP_HPP__)
 #define __INT_BASIC_HASHMAP_HPP__
 
-namespace std
-{
+START_NS(std)
 
-}
+
+
+END_NS(std)
 
 #endif //# __INT_BASIC_HASHMAP_HPP__ ends

@@ -15,8 +15,8 @@
 
 #include "int_xos_definition.hpp"
 
-namespace windows_ns
-{
+START_NS(windows_ns)
+
 #include <Windows.h>
 
 #if DEBUG_LEVEL >= DEBUG_LEVEL_CALIBRATION_CHECK_BASIC
@@ -36,15 +36,28 @@ namespace windows_ns
             throw (ASSERT_EXCEPTION_CODE);
         }
     }
+    template<typename JudgeTy>
+    _INLINE_ void dxt_assert(const JudgeTy &exp, const char *s, const char *info, const char *file, s64 line)
+    {
+        if (!!!(exp))
+        {
+            print("[ERROR] Assert Failed. Condition '%s', Info '%s' in file: %s at line: %lld\n", s, info, file, line);
+            throw (ASSERT_EXCEPTION_CODE);
+        }
+    }
+
     #define assert(exp) windows_ns::dxt_assert(exp, #exp, __FUNCTION__, __LINE__)
+    #define assert_info(exp,info) windows_ns::dxt_assert(exp, #exp, info, __FUNCTION__, __LINE__)
 
 #else
     #define print(...)
     #define assert(exp) ((void)0)
+    #define assert_info(exp, info) ((void)0)
 #endif
 
 #include <stdlib.h>
-}
+
+END_NS(windows_ns)
 
 _INLINE_ s32   atom_increment(s32 volatile &x);
 _INLINE_ s64   atom_increment(s64 volatile &x);
@@ -84,6 +97,7 @@ _INLINE_ void  thrd_destroy(thrd td);
 _INLINE_ void  tick_sleep(u64 ms);
 _INLINE_ void  tick_start();
 _INLINE_ u64   tick_elapse();
+_INLINE_ void  tick_elapse_print();
 
 _INLINE_ lock  lock_create(void);
 _INLINE_ RET   lock_try_get(lock lk);

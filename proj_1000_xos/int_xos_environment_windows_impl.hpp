@@ -73,7 +73,7 @@ _INLINE_ void yield()
 
 _INLINE_ u64 random(u64 mod)
 {
-    return windows_ns::rand() % (++mod);
+    return windows_ns::rand() % (mod);
 }
 
 _INLINE_ void *memory_alloc(u64 sz)
@@ -194,8 +194,13 @@ _INLINE_ void tick_start()
 
 _INLINE_ u64 tick_elapse()
 {
-    assert(tick_record(0)); //# dxt_error : call tick_start() first before tick_elapse()
+    assert_info(tick_record(0), "call tick_start() first before tick_elapse()");
     return tick_count() - tick_record(0);
+}
+
+_INLINE_ void  tick_elapse_print()
+{
+    print("Time elapse is: %llu.\n", tick_elapse());
 }
 
 _INLINE_ lock lock_create(void)

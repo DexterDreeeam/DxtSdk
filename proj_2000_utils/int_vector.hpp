@@ -13,8 +13,7 @@
 #if !defined (__INT_VECTOR_HPP__)
 #define __INT_VECTOR_HPP__
 
-namespace std
-{
+START_NS(std)
 
 template<typename Ty>
 class vector;
@@ -854,6 +853,6 @@ private:
     s64 sz;
 };
 
-}
+END_NS(std)
 
 #endif //# __INT_VECTOR_HPP__ ends

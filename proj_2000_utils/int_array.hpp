@@ -13,8 +13,7 @@
 #if !defined (__INT_ARRAY_HPP__)
 #define __INT_ARRAY_HPP__
 
-namespace std
-{
+START_NS(std)
 
 template<typename Ty, s64 Sz>
 class array;
@@ -468,6 +467,6 @@ public:
     Ty elem[Sz];
 };
 
-}
+END_NS(std)
 
 #endif //# __INT_ARRAY_HPP__ ends

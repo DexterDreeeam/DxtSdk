@@ -13,9 +13,10 @@
 #if !defined (__INT_MAP_HPP__)
 #define __INT_MAP_HPP__
 
-namespace std
-{
+START_NS(std)
 
-}
+
+
+END_NS(std)
 
 #endif //# __INT_MAP_HPP__ ends

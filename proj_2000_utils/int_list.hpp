@@ -13,8 +13,7 @@
 #if !defined (__INT_LIST_HPP__)
 #define __INT_LIST_HPP__
 
-namespace std
-{
+START_NS(std)
 
 template<typename Ty>
 class list;
@@ -131,7 +130,6 @@ struct list_dummy_node
     void *prev;
     void *next;
 };
-
 
 template<typename Ty>
 class list_iter<list<Ty>>
@@ -946,6 +944,6 @@ private:
     s64 sz;
 };
 
-}
+END_NS(std)
 
 #endif //# __INT_LIST_HPP__ ends

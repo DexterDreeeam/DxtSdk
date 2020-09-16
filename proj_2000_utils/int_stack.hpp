@@ -13,8 +13,7 @@
 #if !defined (__INT_STACK_HPP__)
 #define __INT_STACK_HPP__
 
-namespace std
-{
+START_NS(std)
 
 template<typename Ty>
 class stack
@@ -107,6 +106,6 @@ private:
     vector<Ty> vec;
 };
 
-}
+END_NS(std)
 
 #endif //# __INT_STACK_HPP__ ends

@@ -13,8 +13,7 @@
 #if !defined (__INT_PAIR_HPP__)
 #define __INT_PAIR_HPP__
 
-namespace std
-{
+START_NS(std)
 
 template<typename Ty1, typename Ty2>
 class pair
@@ -35,6 +34,16 @@ public:
     pair(Ty1 &&e1, Ty2 &&e2) :
         first(e1),
         second(e2)
+    {}
+
+    pair(const Ty1 &e1) :
+        first(e1),
+        second()
+    {}
+
+    pair(Ty1 &&e1) :
+        first(e1),
+        second()
     {}
 
     pair(const Self_Ty &rhs) :
@@ -79,6 +88,6 @@ public:
     Ty2 second;
 };
 
-}
+END_NS(std)
 
 #endif //# __INT_PAIR_HPP__ ends
