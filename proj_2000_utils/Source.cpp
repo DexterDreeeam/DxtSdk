@@ -30,7 +30,7 @@ int main()
     tick_elapse_print();
 
     queue<int> q = { 2,3,4 };
-    for (int i = 100; i < 150; ++i)
+    for (int i = 10; i < 15; ++i)
     {
         q.push(i);
     }
@@ -43,68 +43,24 @@ int main()
 
     tick_elapse_print();
 
-    return 0;
+    string s = "134abccccc";
+    string s2 = "890a" + s;
 
-    //for (int i = 0; i < 10000000; ++i)
-    //{
-    //    int v = random(10000007);
-    //    vec.push_back(v);
-    //    ss.insert(v);
-    //}
+    s2 += "  123";
 
-    //for (int i : vec)
-    //{
-    //    ss.erase(i);
-    //}
+    if ("134abccccc" == s)
+    {
+        print("ojbk\n");
+    }
 
-    //int time = tick_elapse();
-    //++time;
+    for (auto itr = s2.crbegin(); itr != s2.crend(); ++itr)
+    {
+        print("%c\n", *itr);
+    }
 
-    //for (int i = 0; i < vec2.size(); ++i)
-    //{
-    //    print("vec2[%d] is %d\n", i, vec2[i]);
-    //}
+    print("%s\n", s2.c_str());
 
-    ////print("vec2 capacity is %lld\n", vec2.capacity());
-
-    //vec2.clear();
-
-    //vec2.push_back(1000,1000,2000);
-
-    //for (int i = 0; i < vec2.size(); ++i)
-    //{
-    //    print("vec2[%d] is %d\n", i, vec2[i]);
-    //}
-
-    //print("vec2 size %d", vec2.size());
-
-    //print("---------------------------\n");
-
-    //vec2.insert(1,5,3,5,6,100);
-
-    //for (int i = 0; i < vec2.size(); ++i)
-    //{
-    //    print("vec2[%d] is %d\n", i, vec2[i]);
-    //}
-
-    //print("---------------------------\n");
-
-    //vec2.erase(4,2);
-
-    //for (int i = 0; i < vec2.size(); ++i)
-    //{
-    //    print("vec2[%d] is %d\n", i, vec2[i]);
-    //}
-    //print("---------------------------\n");
-    //for (auto itr = vec2.crbegin(); itr != vec2.crend(); ++itr)
-    //{
-    //    print("%d\n", *itr);
-    //}
-    //print("---------------------------\n");
-    //for (int &i : vec2)
-    //{
-    //    print("%d\n", i);
-    //}
+    tick_elapse_print();
 
     return 0;
 }

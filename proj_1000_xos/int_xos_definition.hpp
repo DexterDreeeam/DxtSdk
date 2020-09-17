@@ -102,6 +102,14 @@ _INLINE_ boole is_success(RET rt)
     return rt > 0L ? boole_true : boole_false;
 }
 
+template<typename Ty1, typename Ty2>
+_INLINE_ _NOALIAS_ void swap(Ty1 &e1, Ty2 &e2) noexcept
+{
+    Ty1 tmp = e1;
+    e1 = e2;
+    e2 = tmp;
+}
+
 _INLINE_ _NOALIAS_ s64 str_len(const char *s)
 {
     s64 i = 0;
