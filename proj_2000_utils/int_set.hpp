@@ -32,6 +32,14 @@ public:
         Base_Ty()
     {}
 
+    set(const Self_Ty &rhs) :
+        Base_Ty(rhs)
+    {}
+
+    set(Self_Ty &&rhs) :
+        Base_Ty(reinterpret_cast<Base_Ty&&>(rhs))
+    {}
+
     ~set() noexcept
     {}
 

@@ -112,7 +112,7 @@ public:
         return key;
     }
 
-    const Key_Ty *mydata() noexcept
+    const Key_Ty *mydata() const noexcept
     {
         return &key;
     }
@@ -156,9 +156,9 @@ public:
         return duo;
     }
 
-    pair<Key_Ty, Val_Ty> *mydata() noexcept
+    pair<const Key_Ty, Val_Ty> *mydata() noexcept
     {
-        return &duo;
+        return pointer_convert(&duo, 0, NodeData_Ty*);
     }
 
 private:

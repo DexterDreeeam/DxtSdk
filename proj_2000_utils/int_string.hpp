@@ -352,6 +352,15 @@ class string
     friend bool operator <=(const char *cstr, const string &s) noexcept;
     friend bool operator >=(const char *cstr, const string &s) noexcept;
 
+    struct string_max_len_expectation
+    {
+        explicit string_max_len_expectation(s64 exp) :
+            max_len(exp)
+        {}
+        ~string_max_len_expectation() = default;
+        s64 max_len;
+    };
+
 public:
     string() noexcept:
         cap(0),
@@ -360,12 +369,6 @@ public:
     {
         assert(_validation());
     }
-
-    string(s64 vol) :
-        cap(_ceil_align(vol + 1)),
-        len(0),
-        ch((char*)memory_alloc(cap))
-    {}
 
     string(s64 vol, char init_char) :
         cap(_ceil_align(vol + 1)),
@@ -388,8 +391,9 @@ public:
     string(const string &rhs) :
         cap(_ceil_align(rhs.len + 1)),
         len(rhs.len),
-        ch((char*)memory_alloc_copy(rhs.ch, cap, len + 1))
+        ch((char*)memory_alloc_copy(rhs.ch, cap, len))
     {
+        _set_tail_zero();
         assert(_validation());
     }
 
@@ -415,7 +419,8 @@ public:
         clear();
         cap = _ceil_align(rhs.len + 1);
         len = rhs.len;
-        ch = (char*)memory_alloc_copy(rhs.ch, cap, len + 1);
+        ch = (char*)memory_alloc_copy(rhs.ch, cap, len);
+        _set_tail_zero();
         assert(_validation());
     }
 
@@ -433,100 +438,52 @@ public:
 
     bool operator ==(const string &rhs) const noexcept
     {
-        return str_equal(ch, rhs.ch);
+        return str_equal(ch ? ch : "", rhs.ch ? rhs.ch : "");
     }
 
     bool operator !=(const string &rhs) const noexcept
     {
-        return !str_equal(ch, rhs.ch);
+        return !str_equal(ch ? ch : "", rhs.ch ? rhs.ch : "");
     }
 
     bool operator <(const string &rhs) const noexcept
     {
-        s64 idx = 0;
-        while (ch[idx] == rhs.ch[idx])
-        {
-            if (ch[idx] != 0)
-            {
-                ++idx;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        return ch[idx] < rhs.ch[idx];
+        return str_compare(ch ? ch : "", rhs.ch ? rhs.ch : "") < 0;
     }
 
     bool operator <(const char *cstr) const noexcept
     {
-        s64 idx = 0;
-        while (ch[idx] == cstr[idx])
-        {
-            if (ch[idx] != 0)
-            {
-                ++idx;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        return ch[idx] < cstr[idx];
+        return str_compare(ch ? ch : "", cstr) < 0;
     }
 
     bool operator >(const string &rhs) const noexcept
     {
-        s64 idx = 0;
-        while (ch[idx] == rhs.ch[idx])
-        {
-            if (ch[idx] != 0)
-            {
-                ++idx;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        return ch[idx] > rhs.ch[idx];
+        return str_compare(ch ? ch : "", rhs.ch ? rhs.ch : "") > 0;
     }
 
     bool operator >(const char *cstr) const noexcept
     {
-        s64 idx = 0;
-        while (ch[idx] == cstr[idx])
-        {
-            if (ch[idx] != 0)
-            {
-                ++idx;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        return ch[idx] > cstr[idx];
+        return str_compare(ch ? ch : "", cstr) > 0;
     }
 
     bool operator <=(const string &rhs) const noexcept
     {
-        return !this->operator >(rhs);
+        return str_compare(ch ? ch : "", rhs.ch ? rhs.ch : "") <= 0;
     }
 
     bool operator <=(const char *cstr) const noexcept
     {
-        return !this->operator >(cstr);
+        return str_compare(ch ? ch : "", cstr) <= 0;
     }
 
     bool operator >=(const string &rhs) const noexcept
     {
-        return !this->operator <(rhs);
+        return str_compare(ch ? ch : "", rhs.ch ? rhs.ch : "") >= 0;
     }
 
     bool operator >=(const char *cstr) const noexcept
     {
-        return !this->operator <(cstr);
+        return str_compare(ch ? ch : "", cstr) >= 0;
     }
 
     char &operator [](s64 pos) noexcept
@@ -535,32 +492,42 @@ public:
         return ch[pos];
     }
 
+    const char &operator [](s64 pos) const noexcept
+    {
+        assert(_validation());
+        return ch[pos];
+    }
+
     string operator +(const string &rhs) const noexcept
     {
-        string ret(len + rhs.len);
+        string ret(string_max_len_expectation(len + rhs.len));
         memory_copy(ch, ret.ch, len);
-        memory_copy(rhs.ch, pointer_convert(ret.ch, len, void*), rhs.len + 1);
+        memory_copy(rhs.ch, pointer_convert(ret.ch, len, void*), rhs.len);
         ret.len = len + rhs.len;
+        ret._set_tail_zero();
+        assert(ret._validation());
         return ret;
     }
 
     string operator +(const char *cstr) const noexcept
     {
         s64 cstr_len = str_len(cstr);
-        string ret(len + cstr_len);
+        string ret(string_max_len_expectation(len + cstr_len));
         memory_copy(ch, ret.ch, len);
         memory_copy(cstr, pointer_convert(ret.ch, len, void*), cstr_len + 1);
         ret.len = len + cstr_len;
+        assert(ret._validation());
         return ret;
     }
 
     string operator +(char c) noexcept
     {
-        string ret(len + 1);
+        string ret(string_max_len_expectation(len + 1));
         memory_copy(ch, ret.ch, len);
         ret.ch[len] = c;
         ret.ch[len + 1] = 0;
         ret.len = len + 1;
+        assert(ret._validation());
         return ret;
     }
 
@@ -568,6 +535,7 @@ public:
     {
         assert(_validation());
         _push_back(c);
+        assert(_validation());
         return *this;
     }
 
@@ -575,6 +543,7 @@ public:
     {
         assert(_validation());
         _push_back(rhs);
+        assert(_validation());
         return *this;
     }
 
@@ -582,6 +551,7 @@ public:
     {
         assert(_validation());
         _push_back(cstr);
+        assert(_validation());
         return *this;
     }
 
@@ -633,6 +603,7 @@ public:
         ::swap(cap, rhs.cap);
         ::swap(len, rhs.len);
         ::swap(ch, rhs.ch);
+        assert(_validation());
     }
 
     char &front() noexcept
@@ -722,6 +693,12 @@ public:
     }
 
 private:
+    string(const string_max_len_expectation &exp) :
+        cap(_ceil_align(exp.max_len + 1)),
+        len(0),
+        ch((char*)memory_alloc(cap))
+    {}
+
     static s64 _ceil_align(s64 len) noexcept
     {
         return ceil(len, string_unit_extent);
@@ -803,8 +780,9 @@ private:
     void _push_back(const string &rhs) noexcept
     {
         _need_space(rhs.len);
-        memory_copy(rhs.ch, &ch[len], rhs.len + 1);
+        memory_copy(rhs.ch, &ch[len], rhs.len);
         len += rhs.len;
+        _set_tail_zero();
     }
 
     void _push_back(const char *cstr) noexcept
@@ -823,75 +801,55 @@ private:
 
 string operator +(char c, const string &s) noexcept
 {
-    string ret(s.len + 1);
+    string ret(string::string_max_len_expectation(s.len + 1));
     ret.ch[0] = c;
-    memory_copy(s.ch, &ret.ch[1], s.len + 1);
+    memory_copy(s.ch, &ret.ch[1], s.len);
     ret.len = s.len + 1;
+    ret._set_tail_zero();
+    assert(ret._validation());
     return ret;
 }
 
 string operator +(const char *cstr, const string &s) noexcept
 {
     s64 cstr_len = str_len(cstr);
-    string ret(cstr_len + s.len);
+    string ret(string::string_max_len_expectation(cstr_len + s.len));
     memory_copy(cstr, ret.ch, cstr_len);
-    memory_copy(s.ch, pointer_convert(ret.ch, cstr_len, void*), s.len + 1);
+    memory_copy(s.ch, pointer_convert(ret.ch, cstr_len, void*), s.len);
     ret.len = cstr_len + s.len;
+    ret._set_tail_zero();
+    assert(ret._validation());
     return ret;
 }
 
 bool operator ==(const char *cstr, const string &s) noexcept
 {
-    return str_equal(cstr, s.ch);
+    return str_equal(cstr, s.ch ? s.ch : "");
 }
 
 bool operator !=(const char *cstr, const string &s) noexcept
 {
-    return !str_equal(cstr, s.ch);
+    return !str_equal(cstr, s.ch ? s.ch : "");
 }
 
 bool operator <(const char *cstr, const string &s) noexcept
 {
-    s64 idx = 0;
-    while (cstr[idx] == s.ch[idx])
-    {
-        if (cstr[idx] != 0)
-        {
-            ++idx;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    return cstr[idx] < s.ch[idx];
+    return str_compare(cstr, s.ch ? s.ch : "") < 0;
 }
 
 bool operator >(const char *cstr, const string &s) noexcept
 {
-    s64 idx = 0;
-    while (cstr[idx] == s.ch[idx])
-    {
-        if (cstr[idx] != 0)
-        {
-            ++idx;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    return cstr[idx] > s.ch[idx];
+    return str_compare(cstr, s.ch ? s.ch : "") > 0;
 }
 
 bool operator <=(const char *cstr, const string &s) noexcept
 {
-    return !operator >(cstr, s);
+    return str_compare(cstr, s.ch ? s.ch : "") <= 0;
 }
 
 bool operator >=(const char *cstr, const string &s) noexcept
 {
-    return !operator <(cstr, s);
+    return str_compare(cstr, s.ch ? s.ch : "") >= 0;
 }
 
 END_NS(std)

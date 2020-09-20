@@ -97,7 +97,7 @@ typedef enum : s32
     RET_NOT_IMMEDIATE,
 } RET;
 
-_INLINE_ boole is_success(RET rt)
+_INLINE_ _NOALIAS_ boole is_success(RET rt) noexcept
 {
     return rt > 0L ? boole_true : boole_false;
 }
@@ -110,7 +110,7 @@ _INLINE_ _NOALIAS_ void swap(Ty1 &e1, Ty2 &e2) noexcept
     e2 = tmp;
 }
 
-_INLINE_ _NOALIAS_ s64 str_len(const char *s)
+_INLINE_ _NOALIAS_ s64 str_len(const char *s) noexcept
 {
     s64 i = 0;
     while(*(s + i) != '\0')
@@ -120,7 +120,7 @@ _INLINE_ _NOALIAS_ s64 str_len(const char *s)
     return i;
 }
 
-_INLINE_ _NOALIAS_ boole str_equal(const char *s1, const char *s2)
+_INLINE_ _NOALIAS_ boole str_equal(const char *s1, const char *s2) noexcept
 {
     while (*s1 == *s2)
     {
@@ -132,6 +132,21 @@ _INLINE_ _NOALIAS_ boole str_equal(const char *s1, const char *s2)
         ++s2;
     }
     return boole_false;
+}
+
+_INLINE_ _NOALIAS_ s64 str_compare(const char *s1, const char *s2) noexcept
+{
+    s64 i = 0;
+    while (*s1 == *s2)
+    {
+        if (*s1 == 0)
+        {
+            return 0; //# equal
+        }
+        ++s1;
+        ++s2;
+    }
+    return (s64)*s1 - (s64)*s2;
 }
 
 #endif //# __INT_XOS_DEFINITION_HPP__ ends

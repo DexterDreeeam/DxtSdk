@@ -6,6 +6,15 @@ int main()
 {
     tick_start();
 
+    vector<string> vs;
+    vs.push_back("ok");
+    vs.push_back("bu ok");
+
+    for (auto &s : vs)
+    {
+        print("%s\n", s.c_str());
+    }
+
     map<int, int> mm;
     mm.insert(1, 1);
     mm.insert(make_pair(2,4));
@@ -29,20 +38,6 @@ int main()
 
     tick_elapse_print();
 
-    queue<int> q = { 2,3,4 };
-    for (int i = 10; i < 15; ++i)
-    {
-        q.push(i);
-    }
-
-    while (q.size())
-    {
-        print("%d\n", q.front());
-        q.pop();
-    }
-
-    tick_elapse_print();
-
     string s = "134abccccc";
     string s2 = "890a" + s;
 
@@ -53,7 +48,7 @@ int main()
         print("ojbk\n");
     }
 
-    for (auto itr = s2.crbegin(); itr != s2.crend(); ++itr)
+    for (auto itr = s2.cbegin(); itr != s2.cend(); ++itr)
     {
         print("%c\n", *itr);
     }
@@ -62,5 +57,50 @@ int main()
 
     tick_elapse_print();
 
+    print("========================================\n");
+
+    unordered_map<int, int> mymap;
+
+    for (int i = 0; i < 1000; ++i)
+    {
+        if (i == 16)
+        {
+            ++i;
+            --i;
+        }
+        mymap[i] = i + 100;
+    }
+
+    for (int i = 0; i < 1000; ++i)
+    {
+        if (i % 10 == 2)
+        {
+            mymap.erase(mymap.find(i));
+        }
+    }
+
+    for (auto itr = mymap.begin(); itr != mymap.end(); ++itr)
+    {
+        print("%d : %d\n", itr->first, itr->second);
+    }
+    print("========================================\n");
+
+    unordered_set<int> myset;
+    for (int i = 0; i < 2000; ++i)
+    {
+        myset.insert(i);
+    }
+
+    for (int i = 10; i < 2000; i += 10)
+    {
+        myset.erase(myset.find(i));
+    }
+
+    for (int i : myset)
+    {
+        print("%d\n", i);
+    }
+
+    print("========================================\n");
     return 0;
 }
