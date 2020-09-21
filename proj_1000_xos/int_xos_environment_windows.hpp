@@ -19,13 +19,12 @@ START_NS(windows_ns)
 
 #include <Windows.h>
 
-#if DEBUG_LEVEL >= DEBUG_LEVEL_CALIBRATION_CHECK_BASIC
+#define ASSERT_EXCEPTION_CODE (0x09090909L)
 
+#if DEBUG_LEVEL >= DEBUG_LEVEL_CALIBRATION_CHECK_ALLINPUT
     #include <stdio.h>
     #include <stdarg.h>
     #define print(...) windows_ns::printf(__VA_ARGS__)
-
-    #define ASSERT_EXCEPTION_CODE (0x09090909L)
 
     template<typename JudgeTy>
     _INLINE_ void dxt_assert(const JudgeTy &exp, const char *s, const char *file, s64 line)
@@ -46,6 +45,7 @@ START_NS(windows_ns)
         }
     }
 
+    //# assert check input parameter
     #define assert(exp) windows_ns::dxt_assert(exp, #exp, __FUNCTION__, __LINE__)
     #define assert_info(exp,info) windows_ns::dxt_assert(exp, #exp, info, __FUNCTION__, __LINE__)
 

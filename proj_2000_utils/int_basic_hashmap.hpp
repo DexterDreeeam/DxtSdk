@@ -976,11 +976,7 @@ protected:
     void _reorg() noexcept
     {
         s64 mymaplen = maplen;
-        if (_reorg(mymaplen * 3 - 1))
-        {
-            return;
-        }
-        if (_reorg(mymaplen * 4 - 1))
+        if (_reorg(mymaplen * 4 - 1) || _reorg(mymaplen * 7 - 1))
         {
             return;
         }

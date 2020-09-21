@@ -61,17 +61,12 @@ int main()
 
     unordered_map<int, int> mymap;
 
-    for (int i = 0; i < 1000; ++i)
+    for (int i = 0; i < 100; ++i)
     {
-        if (i == 16)
-        {
-            ++i;
-            --i;
-        }
         mymap[i] = i + 100;
     }
 
-    for (int i = 0; i < 1000; ++i)
+    for (int i = 0; i < 100; ++i)
     {
         if (i % 10 == 2)
         {
@@ -79,28 +74,56 @@ int main()
         }
     }
 
-    for (auto itr = mymap.begin(); itr != mymap.end(); ++itr)
-    {
-        print("%d : %d\n", itr->first, itr->second);
-    }
+    //for (auto itr = mymap.begin(); itr != mymap.end(); ++itr)
+    //{
+    //    //print("%d : %d\n", itr->first, itr->second);
+    //}
+
     print("========================================\n");
+    tick_elapse_print();
 
     unordered_set<int> myset;
-    for (int i = 0; i < 2000; ++i)
+    for (int i = 0; i < 100; ++i)
     {
         myset.insert(i);
     }
 
-    for (int i = 10; i < 2000; i += 10)
+    for (int i = 0; i < 10; ++i)
     {
+        if (i % 10 == 2)
         myset.erase(myset.find(i));
     }
 
-    for (int i : myset)
+    //for (int i : myset)
+    //{
+    //    //print("%d\n", i);
+    //}
+
+    print("========================================\n");
+    tick_elapse_print();
+
+    deque<int> deq;
+    for (int i = 0; i < 1000; ++i)
     {
-        print("%d\n", i);
+        deq.push_back(i);
+        deq.push_front(-i);
+    }
+
+    for (int i = 0; i < 500; ++i)
+    {
+        deq.pop_back();
+        deq.pop_front();
+    }
+
+    for (auto i = deq.rbegin(); i != deq.rend(); ++i)
+    {
+        print("%d\n", *i);
     }
 
     print("========================================\n");
+    tick_elapse_print();
+
+    s64 i = stoll(string("-9223372036854775809"));
+
     return 0;
 }

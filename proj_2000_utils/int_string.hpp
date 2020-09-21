@@ -852,6 +852,192 @@ bool operator >=(const char *cstr, const string &s) noexcept
     return str_compare(cstr, s.ch ? s.ch : "") >= 0;
 }
 
+template<typename Int_Ty>
+string to_string(Int_Ty integer);
+
+template<>
+string to_string<u64>(u64 integer) noexcept
+{
+    if (integer == 0)
+    {
+        return string("0");
+    }
+    s64 digits = 0;
+    u64 num = integer;
+    while (num)
+    {
+        ++digits;
+        num /= 10;
+    }
+    string rst(digits, '0');
+    while (integer)
+    {
+        --digits;
+        rst[digits] = '0' + integer % 10;
+        integer /= 10;
+    }
+    return rst;
+}
+
+template<>
+string to_string<s64>(s64 integer) noexcept
+{
+    if (integer == 0)
+    {
+        return string("0");
+    }
+    if (integer == s64_min)
+    {
+        return string("-9223372036854775808");
+    }
+    s64 digits = 0;
+    s64 num = integer;
+    while (num)
+    {
+        ++digits;
+        num /= 10;
+    }
+    if (integer < 0)
+    {
+        ++digits;
+        integer = -integer;
+    }
+    string rst(digits, '-');
+    while (integer)
+    {
+        --digits;
+        rst[digits] = '0' + integer % 10;
+        integer /= 10;
+    }
+    return rst;
+}
+
+template<>
+string to_string<u32>(u32 integer) noexcept
+{
+    return to_string<u64>(integer);
+}
+
+template<>
+string to_string<s32>(s32 integer) noexcept
+{
+    return to_string<s64>(integer);
+}
+
+template<>
+string to_string<unsigned int>(unsigned int integer) noexcept
+{
+    return to_string<u64>(integer);
+}
+
+template<>
+string to_string<int>(int integer) noexcept
+{
+    return to_string<s64>(integer);
+}
+
+template<>
+string to_string<u16>(u16 integer) noexcept
+{
+    return to_string<u64>(integer);
+}
+
+template<>
+string to_string<s16>(s16 integer) noexcept
+{
+    return to_string<s64>(integer);
+}
+
+template<>
+string to_string<u8>(u8 integer) noexcept
+{
+    return to_string<u64>(integer);
+}
+
+template<>
+string to_string<s8>(s8 integer) noexcept
+{
+    return to_string<s64>(integer);
+}
+
+s32 stoi(const string &str) noexcept
+{
+    if (str.size() == 0)
+    {
+        return 0;
+    }
+    const char *cstr = str.c_str();
+    s64 max_digits;
+    if (str[0] >= '0' && str[0] <= '9')
+    {
+        max_digits = 10;
+    }
+    else if (str[0] == '+' || str[0] == '-')
+    {
+        ++cstr;
+        max_digits = 11;
+    }
+    else
+    {
+        return 0;
+    }
+    if (str.size() > max_digits || (str.size() == max_digits && str_compare(cstr, "2147483647") > 0))
+    {
+        return str[0] == '-' ? s32_min : s32_max;
+    }
+    s32 rst = 0;
+    while (*cstr)
+    {
+        if (*cstr < '0' || *cstr > '9')
+        {
+            return 0;
+        }
+        rst *= 10;
+        rst += *cstr - '0';
+        ++cstr;
+    }
+    return str[0] == '-' ? -rst : rst;
+}
+
+s64 stoll(const string &str) noexcept
+{
+    if (str.size() == 0)
+    {
+        return 0;
+    }
+    const char *cstr = str.c_str();
+    s64 max_digits;
+    if (str[0] >= '0' && str[0] <= '9')
+    {
+        max_digits = 19;
+    }
+    else if (str[0] == '+' || str[0] == '-')
+    {
+        ++cstr;
+        max_digits = 20;
+    }
+    else
+    {
+        return 0;
+    }
+    if (str.size() > max_digits || (str.size() == max_digits && str_compare(cstr, "9223372036854775807") > 0))
+    {
+        return str[0] == '-' ? s64_min : s64_max;
+    }
+    s64 rst = 0;
+    while (*cstr)
+    {
+        if (*cstr < '0' || *cstr > '9')
+        {
+            return 0;
+        }
+        rst *= 10;
+        rst += *cstr - '0';
+        ++cstr;
+    }
+    return str[0] == '-' ? -rst : rst;
+}
+
 END_NS(std)
 
 #endif //# __INT_STRING_HPP__ ends

@@ -83,22 +83,22 @@ public:
         return ret;
     }
 
-    bool operator ==(const Self_Ty &rhs)
+    bool operator ==(const Self_Ty &rhs) const noexcept
     {
         return data == rhs.data;
     }
 
-    bool operator !=(const Self_Ty &rhs)
+    bool operator !=(const Self_Ty &rhs) const noexcept
     {
         return data != rhs.data;
     }
 
-    Data_Ty *operator ->()
+    Data_Ty *operator ->() noexcept
     {
         return data;
     }
 
-    Data_Ty &operator *()
+    Data_Ty &operator *() noexcept
     {
         return *data;
     }

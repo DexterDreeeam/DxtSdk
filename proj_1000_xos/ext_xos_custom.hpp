@@ -21,6 +21,23 @@
 // ===========================
 
 
+/*
+ *  Debug Level
+ *    - DEBUG_FULL
+ *        function call timer
+ *
+ *    - DEBUG_CRIT
+ *        function call stack
+ *        normal log
+ *        error log
+ *
+ *    - DEBUG_HALF
+ *        inside checker
+ *        input checker
+ *
+ *    - DEBUG_NONE
+ */
+
 // ===========================
 #define DEBUG_FULL  //# all logs and all checkers enabled
 //#define DEBUG_CRIT  //# critical logs and all checkers enabled
