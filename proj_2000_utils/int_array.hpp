@@ -13,10 +13,14 @@
 #if !defined (__INT_ARRAY_HPP__)
 #define __INT_ARRAY_HPP__
 
-START_NS(std)
+namespace std
+{
 
 template<typename Ty, s64 Sz>
 class array;
+
+namespace std_array
+{
 
 template<typename Ctnr_Ty>
 class array_iter;
@@ -343,21 +347,22 @@ private:
     const Data_Ty *data;
 };
 
+}
 
 template<typename Ty, s64 Sz>
 class array
 {
     using Self_Ty = array<Ty, Sz>;
     using Data_Ty = Ty;
-    using Iter_Ty = array_iter<Self_Ty>;
-    using Ritr_Ty = array_ritr<Self_Ty>;
-    using cIter_Ty = array_const_iter<Self_Ty>;
-    using cRitr_Ty = array_const_ritr<Self_Ty>;
+    using Iter_Ty = std_array::array_iter<Self_Ty>;
+    using Ritr_Ty = std_array::array_ritr<Self_Ty>;
+    using cIter_Ty = std_array::array_const_iter<Self_Ty>;
+    using cRitr_Ty = std_array::array_const_ritr<Self_Ty>;
 
-    friend class array_iter<Self_Ty>;
-    friend class array_ritr<Self_Ty>;
-    friend class array_const_iter<Self_Ty>;
-    friend class array_const_ritr<Self_Ty>;
+    friend class std_array::array_iter<Self_Ty>;
+    friend class std_array::array_ritr<Self_Ty>;
+    friend class std_array::array_const_iter<Self_Ty>;
+    friend class std_array::array_const_ritr<Self_Ty>;
 
 public:
     Ty &operator [](s64 pos) noexcept
@@ -467,6 +472,6 @@ public:
     Ty elem[Sz];
 };
 
-END_NS(std)
+}
 
 #endif //# __INT_ARRAY_HPP__ ends

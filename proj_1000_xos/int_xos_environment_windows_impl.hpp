@@ -385,4 +385,97 @@ _INLINE_ void timr_destroy(timr tm)
     delete reinterpret_cast<timr_cb_desc*>(tm);
 }
 
+_INLINE_ date date_query()
+{
+    date rst = {};
+    windows_ns::SYSTEMTIME sys;
+    windows_ns::GetLocalTime(&sys);
+    rst.year = sys.wYear;
+    rst.month = sys.wMonth;
+    rst.day = sys.wDay;
+    rst.week_day = sys.wDayOfWeek;
+    rst.hour = sys.wHour;
+    rst.minute = sys.wMinute;
+    rst.second = sys.wSecond;
+    rst.millisec = sys.wMilliseconds;
+    return rst;
+}
+
+_INLINE_ outf output_file_create(const char *path)
+{
+    char path_buf[512] = {};
+    s64 len = str_len(path);
+    assert(len < 512);
+    memory_copy(path, path_buf, len);
+    s64 last_inexist_directory_idx = 0;
+    s64 idx = len - 1;
+    windows_ns::WIN32_FIND_DATAA FindFileData;
+    while (idx >= 0)
+    {
+        if (path_buf[idx] == '/')
+        {
+            path_buf[idx] = 0;
+            windows_ns::HANDLE hFind = windows_ns::FindFirstFileA(path_buf, &FindFileData);
+            path_buf[idx] = '/';
+            if (hFind != (windows_ns::HANDLE)(windows_ns::LONG_PTR)-1)
+            {
+                //# not INVALID_HANDLE_VALUE
+                windows_ns::FindClose(hFind);
+                last_inexist_directory_idx = idx;
+                break;
+            }
+        }
+        --idx;
+    }
+    assert(last_inexist_directory_idx);
+    while (last_inexist_directory_idx < len)
+    {
+        idx = last_inexist_directory_idx + 1;
+        while (idx < len && path_buf[idx] != '/')
+        {
+            ++idx;
+        }
+        if (idx >= len)
+        {
+            break;
+        }
+        path_buf[idx] = 0;
+        if (!windows_ns::CreateDirectoryA(path_buf, nullptr))
+        {
+            assert(0);
+        }
+        path_buf[idx] = '/';
+        last_inexist_directory_idx = idx;
+    }
+    outf f = windows_ns::CreateFileA(
+        path, STANDARD_RIGHTS_WRITE | FILE_APPEND_DATA, FILE_SHARE_WRITE, nullptr,
+        OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+    return f;
+}
+
+_INLINE_ boole output_file_write(outf f, const char *content)
+{
+    if (windows_ns::WriteFile(f, content, str_len(content), nullptr, nullptr))
+    {
+        return boole_true;
+    }
+    else
+    {
+        return boole_false;
+    }
+}
+
+_INLINE_ boole output_file_destroy(outf f)
+{
+    windows_ns::FlushFileBuffers(f);
+    if (windows_ns::CloseHandle(f))
+    {
+        return boole_true;
+    }
+    else
+    {
+        return boole_false;
+    }
+}
+
 #pragma warning (pop)

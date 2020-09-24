@@ -13,10 +13,16 @@
 #if !defined (__INT_LIST_HPP__)
 #define __INT_LIST_HPP__
 
-START_NS(std)
+#include "int_basic_slot_allocator.hpp"
+
+namespace std
+{
 
 template<typename Ty>
 class list;
+
+namespace std_list
+{
 
 template<typename Ctnr_Ty>
 class list_iter;
@@ -475,22 +481,23 @@ private:
     const Node_Ty *node;
 };
 
+}
 
 template<typename Ty>
 class list
 {
     using Data_Ty = Ty;
     using Self_Ty = list<Ty>;
-    using Node_Ty = list_node<Ty>;
-    using Iter_Ty = list_iter<Self_Ty>;
-    using Ritr_Ty = list_ritr<Self_Ty>;
-    using cIter_Ty = list_const_iter<Self_Ty>;
-    using cRitr_Ty = list_const_ritr<Self_Ty>;
+    using Node_Ty = std_list::list_node<Ty>;
+    using Iter_Ty = std_list::list_iter<Self_Ty>;
+    using Ritr_Ty = std_list::list_ritr<Self_Ty>;
+    using cIter_Ty = std_list::list_const_iter<Self_Ty>;
+    using cRitr_Ty = std_list::list_const_ritr<Self_Ty>;
 
-    friend class list_iter<Self_Ty>;
-    friend class list_ritr<Self_Ty>;
-    friend class list_const_iter<Self_Ty>;
-    friend class list_const_ritr<Self_Ty>;
+    friend class std_list::list_iter<Self_Ty>;
+    friend class std_list::list_ritr<Self_Ty>;
+    friend class std_list::list_const_iter<Self_Ty>;
+    friend class std_list::list_const_ritr<Self_Ty>;
 
 public:
     list() :
@@ -939,11 +946,11 @@ private:
     }
 
 private:
-    list_dummy_node head;
+    std_list::list_dummy_node head;
     slot_allocator<sizeof(Node_Ty)> allocator;
     s64 sz;
 };
 
-END_NS(std)
+}
 
 #endif //# __INT_LIST_HPP__ ends

@@ -13,13 +13,16 @@
 #if !defined (__INT_SET_HPP__)
 #define __INT_SET_HPP__
 
-START_NS(std)
+#include "int_basic_rbtree.hpp"
+
+namespace std
+{
 
 template<typename Key_Ty>
-class set : public rbtree<Key_Ty>
+class set : public std_rbtree::rbtree<Key_Ty>
 {
     using Self_Ty = set<Key_Ty>;
-    using Base_Ty = rbtree<Key_Ty>;
+    using Base_Ty = std_rbtree::rbtree<Key_Ty>;
     using Node_Ty = typename Base_Ty::Node_Ty;
 
     using Iter_Ty = typename Base_Ty::Iter_Ty;
@@ -144,6 +147,6 @@ public:
     }
 };
 
-END_NS(std)
+}
 
 #endif //# __INT_SET_HPP__ ends

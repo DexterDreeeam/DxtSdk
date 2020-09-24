@@ -13,13 +13,17 @@
 #if !defined (__INT_UNORDERED_MAP_HPP__)
 #define __INT_UNORDERED_MAP_HPP__
 
-START_NS(std)
+#include "int_basic_hash.hpp"
+#include "int_basic_hashmap.hpp"
+
+namespace std
+{
 
 template<typename Key_Ty, typename Val_Ty>
-class unordered_map : protected hashmap<Key_Ty, Val_Ty>
+class unordered_map : protected std_hashmap::hashmap<Key_Ty, Val_Ty>
 {
     using Self_Ty = unordered_map<Key_Ty, Val_Ty>;
-    using Base_Ty = hashmap<Key_Ty, Val_Ty>;
+    using Base_Ty = std_hashmap::hashmap<Key_Ty, Val_Ty>;
     using Node_Ty = typename Base_Ty::Node_Ty;
 
     using Iter_Ty = typename Base_Ty::Iter_Ty;
@@ -66,7 +70,8 @@ public:
 
     s64 count(const Key_Ty &k) const noexcept
     {
-        return Base_Ty::_peek_node(k) ? 1 : 0;
+        u64 hs = Hash(k);
+        return Base_Ty::_peek_node(k, hs) ? 1 : 0;
     }
 
     Val_Ty &operator [](const Key_Ty &k) noexcept
@@ -164,6 +169,6 @@ public:
     }
 };
 
-END_NS(std)
+}
 
 #endif //# __INT_UNORDERED_MAP_HPP__ ends

@@ -13,7 +13,8 @@
 #if !defined (__INT_PAIR_HPP__)
 #define __INT_PAIR_HPP__
 
-START_NS(std)
+namespace std
+{
 
 template<typename Ty1, typename Ty2>
 class pair
@@ -125,17 +126,17 @@ public:
 };
 
 template<typename Ty1, typename Ty2>
-pair<Ty1, Ty2> make_pair(const Ty1 &e1, const Ty2 &e2) noexcept
+_INLINE_ pair<Ty1, Ty2> make_pair(const Ty1 &e1, const Ty2 &e2) noexcept
 {
     return pair<Ty1, Ty2>(e1, e2);
 }
 
 template<typename Ty1, typename Ty2>
-pair<Ty1, Ty2> make_pair(Ty1 &&e1, Ty2 &&e2) noexcept
+_INLINE_ pair<Ty1, Ty2> make_pair(Ty1 &&e1, Ty2 &&e2) noexcept
 {
     return pair<Ty1, Ty2>(e1, e2);
 }
 
-END_NS(std)
+}
 
 #endif //# __INT_PAIR_HPP__ ends

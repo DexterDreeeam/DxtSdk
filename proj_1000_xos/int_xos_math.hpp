@@ -16,9 +16,10 @@
 #pragma warning (push)
 #pragma warning (disable : 4005)
 
-START_NS(windows_ns)
+namespace windows_ns
+{
 #include <math.h>
-END_NS(windows_ns)
+}
 
 #include "int_xos_math_impl.hpp"
 
@@ -41,12 +42,18 @@ END_NS(windows_ns)
 #define sqrt_inv(x)                       __sqrt_inv(x)
 #define degree_radian(x)                  __degree_radian(x)
 #define radian_degree(x)                  __radian_degree(x)
-#define acos_degree(x)                    __radian_degree(__acos(x))       //# [-1, 1] : [0, 180]
-#define acos_radian(x)                    __acos(x)                        //# [-1, 1] : [0, +Pi]
-#define asin_degree(x)                    __radian_degree(__asin(x))       //# [-1, 1] : [-90, 90]
-#define asin_radian(x)                    __asin(x)                        //# [-1, 1] : [-0.5 * Pi, 0.5 * Pi]
-#define atan2_degree(x,y)                 __radian_degree(__atan2(x, y))   //# (x != 0 || y != 0) : (-180, 180]
+#define tan_radian(x)                     windows_ns::tan(x)
+#define tan_degree(x)                     windows_ns::tan(degree_radian(x))
+#define sin_radian(x)                     windows_ns::sin(x)
+#define sin_degree(x)                     windows_ns::sin(degree_radian(x))
+#define cos_radian(x)                     windows_ns::cos(x)
+#define cos_degree(x)                     windows_ns::cos(degree_radian(x))
 #define atan2_radian(x,y)                 __atan2(x, y)                    //# (x != 0 || y != 0) : (-Pi, +Pi]
+#define atan2_degree(x,y)                 __radian_degree(__atan2(x, y))   //# (x != 0 || y != 0) : (-180, 180]
+#define asin_radian(x)                    __asin(x)                        //# [-1, 1] : [-0.5 * Pi, 0.5 * Pi]
+#define asin_degree(x)                    __radian_degree(__asin(x))       //# [-1, 1] : [-90, 90]
+#define acos_radian(x)                    __acos(x)                        //# [-1, 1] : [0, +Pi]
+#define acos_degree(x)                    __radian_degree(__acos(x))       //# [-1, 1] : [0, 180]
 #define pi                                (3.1415926535897932384626433832795f)
 
 _INLINE_ void simd_write  (const f32 *src, simd4xf32 *dst);

@@ -14,7 +14,9 @@
 #define __EXT_XOS_INTERFACE_HPP__
 
 #include "ext_xos_custom.hpp"
+#include "int_xos_definition.hpp"
 #include "int_xos_environment.hpp"
+#include "int_xos_new.hpp"
 #include "int_xos_math.hpp"
 
 #endif //# __EXT_XOS_INTERFACE_HPP__ ends

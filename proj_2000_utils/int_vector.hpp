@@ -13,10 +13,14 @@
 #if !defined (__INT_VECTOR_HPP__)
 #define __INT_VECTOR_HPP__
 
-START_NS(std)
+namespace std
+{
 
 template<typename Ty>
 class vector;
+
+namespace std_vector
+{
 
 template<typename Ctnr_Ty>
 class vector_iter;
@@ -357,6 +361,7 @@ private:
     const Data_Ty *data;
 };
 
+}
 
 const s64 vector_unit_extent = 4LL;
 const s64 vector_cap_max = 1LL << 30;
@@ -371,15 +376,15 @@ class vector
 
     using Self_Ty = vector<Ty>;
     using Data_Ty = Ty;
-    using Iter_Ty = vector_iter<Self_Ty>;
-    using Ritr_Ty = vector_ritr<Self_Ty>;
-    using cIter_Ty = vector_const_iter<Self_Ty>;
-    using cRitr_Ty = vector_const_ritr<Self_Ty>;
+    using Iter_Ty = std_vector::vector_iter<Self_Ty>;
+    using Ritr_Ty = std_vector::vector_ritr<Self_Ty>;
+    using cIter_Ty = std_vector::vector_const_iter<Self_Ty>;
+    using cRitr_Ty = std_vector::vector_const_ritr<Self_Ty>;
 
-    friend class vector_iter<Self_Ty>;
-    friend class vector_ritr<Self_Ty>;
-    friend class vector_const_iter<Self_Ty>;
-    friend class vector_const_ritr<Self_Ty>;
+    friend class std_vector::vector_iter<Self_Ty>;
+    friend class std_vector::vector_ritr<Self_Ty>;
+    friend class std_vector::vector_const_iter<Self_Ty>;
+    friend class std_vector::vector_const_ritr<Self_Ty>;
 
 public:
     vector() :
@@ -929,6 +934,6 @@ private:
     s64 sz;
 };
 
-END_NS(std)
+}
 
 #endif //# __INT_VECTOR_HPP__ ends

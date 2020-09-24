@@ -15,7 +15,8 @@
 
 #include "int_xos_definition.hpp"
 
-START_NS(windows_ns)
+namespace windows_ns
+{
 
 #include <Windows.h>
 
@@ -57,7 +58,7 @@ START_NS(windows_ns)
 
 #include <stdlib.h>
 
-END_NS(windows_ns)
+}
 
 _INLINE_ s32   atom_increment(s32 volatile &x);
 _INLINE_ s64   atom_increment(s64 volatile &x);
@@ -84,9 +85,22 @@ typedef                u64  hndl;
 typedef windows_ns::HANDLE  thrd;
 typedef windows_ns::HANDLE  lock;
 typedef windows_ns::HANDLE  evnt;
+typedef windows_ns::HANDLE  outf;
 typedef       volatile s64 *spin;
 typedef               hndl  timr;
 typedef void (Callback_Func)(void *param);
+
+typedef struct
+{
+    s32 year;
+    s32 month;
+    s32 day;
+    s32 week_day;
+    s32 hour;
+    s32 minute;
+    s32 second;
+    s32 millisec;
+} date;
 
 _INLINE_ thrd  thrd_create(Callback_Func *fn, void *param);
 _INLINE_ u64   thrd_myid();
@@ -119,6 +133,12 @@ _INLINE_ void  evnt_destroy(evnt ev);
 _INLINE_ timr  timr_create(Callback_Func *fn);
 _INLINE_ void  timr_trigger(timr tm, void *param, u64 ms);
 _INLINE_ void  timr_destroy(timr tm);
+
+_INLINE_ date  date_query();
+
+_INLINE_ outf  output_file_create(const char *path);
+_INLINE_ boole output_file_write(outf f, const char *content);
+_INLINE_ boole output_file_destroy(outf f);
 
 #include "int_xos_environment_windows_impl.hpp"
 

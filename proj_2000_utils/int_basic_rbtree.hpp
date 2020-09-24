@@ -13,10 +13,20 @@
 #if !defined (__INT_BASIC_RBTREE_HPP__)
 #define __INT_BASIC_RBTREE_HPP__
 
-START_NS(std)
+#include "int_basic_slot_allocator.hpp"
+#include "int_pair.hpp"
+
+namespace std
+{
+
+namespace std_rbtree
+{
 
 struct rbtree_dummy_type
 {};
+
+template<typename Key_Ty, typename Val_Ty = rbtree_dummy_type>
+class rbtree;
 
 typedef boole RB_TREE_COLOR;
 #define RB_TREE_BLACK (boole_false)
@@ -26,9 +36,6 @@ template<typename Key_Ty, typename Val_Ty = rbtree_dummy_type>
 class rbtree_node;
 
 class rbtree_base_node;
-
-template<typename Key_Ty, typename Val_Ty = rbtree_dummy_type>
-class rbtree;
 
 class rbtree_base_iter;
 
@@ -244,7 +251,7 @@ public:
 };
 
 template<typename Key_Ty, typename Val_Ty>
-class rbtree_iter<rbtree<Key_Ty, Val_Ty>> : protected rbtree_base_iter
+class rbtree_iter<rbtree<Key_Ty, Val_Ty>> : public rbtree_base_iter
 {
     friend class rbtree<Key_Ty, Val_Ty>;
     template<typename Key_Ty> friend class set;
@@ -328,7 +335,7 @@ public:
 };
 
 template<typename Key_Ty, typename Val_Ty>
-class rbtree_ritr<rbtree<Key_Ty, Val_Ty>> : protected rbtree_base_iter
+class rbtree_ritr<rbtree<Key_Ty, Val_Ty>> : public rbtree_base_iter
 {
     friend class rbtree<Key_Ty, Val_Ty>;
     template<typename Key_Ty> friend class set;
@@ -412,7 +419,7 @@ public:
 };
 
 template<typename Key_Ty, typename Val_Ty>
-class rbtree_const_iter<rbtree<Key_Ty, Val_Ty>> : protected rbtree_base_iter
+class rbtree_const_iter<rbtree<Key_Ty, Val_Ty>> : public rbtree_base_iter
 {
     friend class rbtree<Key_Ty, Val_Ty>;
     template<typename Key_Ty> friend class set;
@@ -496,7 +503,7 @@ public:
 };
 
 template<typename Key_Ty, typename Val_Ty>
-class rbtree_const_ritr<rbtree<Key_Ty, Val_Ty>> : protected rbtree_base_iter
+class rbtree_const_ritr<rbtree<Key_Ty, Val_Ty>> : public rbtree_base_iter
 {
     friend class rbtree<Key_Ty, Val_Ty>;
     template<typename Key_Ty> friend class set;
@@ -1411,10 +1418,12 @@ private:
 
 private:
     slot_allocator<sizeof(Node_Ty)> allocator;
-    rbtree_base_node head;
+    BaseNode_Ty head;
     s64 sz;
 };
 
-END_NS(std)
+}
+
+}
 
 #endif //# __INT_BASIC_RBTREE_HPP__ ends

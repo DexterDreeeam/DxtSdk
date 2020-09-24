@@ -13,13 +13,16 @@
 #if !defined (__INT_UNORDERED_SET_HPP__)
 #define __INT_UNORDERED_SET_HPP__
 
-START_NS(std)
+#include "int_basic_hashmap.hpp"
+
+namespace std
+{
 
 template<typename Key_Ty>
-class unordered_set : protected hashmap<Key_Ty>
+class unordered_set : protected std_hashmap::hashmap<Key_Ty>
 {
     using Self_Ty = unordered_set<Key_Ty>;
-    using Base_Ty = hashmap<Key_Ty>;
+    using Base_Ty = std_hashmap::hashmap<Key_Ty>;
     using Node_Ty = typename Base_Ty::Node_Ty;
 
     using Iter_Ty = typename Base_Ty::Iter_Ty;
@@ -133,6 +136,6 @@ public:
     }
 };
 
-END_NS(std)
+}
 
 #endif //# __INT_UNORDERED_SET_HPP__ ends

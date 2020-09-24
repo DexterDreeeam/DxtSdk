@@ -13,13 +13,16 @@
 #if !defined (__INT_MAP_HPP__)
 #define __INT_MAP_HPP__
 
-START_NS(std)
+#include "int_basic_rbtree.hpp"
+
+namespace std
+{
 
 template<typename Key_Ty, typename Val_Ty>
-class map : public rbtree<Key_Ty, Val_Ty>
+class map : public std_rbtree::rbtree<Key_Ty, Val_Ty>
 {
     using Self_Ty = map<Key_Ty, Val_Ty>;
-    using Base_Ty = rbtree<Key_Ty, Val_Ty>;
+    using Base_Ty = std_rbtree::rbtree<Key_Ty, Val_Ty>;
     using Node_Ty = typename Base_Ty::Node_Ty;
 
     using Iter_Ty = typename Base_Ty::Iter_Ty;
@@ -163,6 +166,6 @@ public:
     }
 };
 
-END_NS(std)
+}
 
 #endif //# __INT_MAP_HPP__ ends

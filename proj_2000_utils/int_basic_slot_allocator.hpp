@@ -13,7 +13,8 @@
 #if !defined (__INT_BASIC_SLOT_ALLOCATOR_HPP__)
 #define __INT_BASIC_SLOT_ALLOCATOR_HPP__
 
-START_NS(std)
+namespace std
+{
 
 const s64 slot_allocator_default_cap = 4LL;
 
@@ -197,6 +198,6 @@ private:
     _block<DataSz> *block_head;
 };
 
-END_NS(std)
+}
 
 #endif //# __INT_BASIC_SLOT_ALLOCATOR_HPP__ ends

@@ -13,9 +13,14 @@
 #if !defined (__INT_STRING_HPP__)
 #define __INT_STRING_HPP__
 
-START_NS(std)
+namespace std
+{
 
 class string;
+
+namespace std_string
+{
+
 class string_iter;
 class string_ritr;
 class string_const_iter;
@@ -333,15 +338,22 @@ private:
     char *ptr;
 };
 
+}
+
 const s64 string_unit_extent = 4LL;
 const s64 string_cap_max = 1LL << 30;
 
 class string
 {
-    friend class string_iter;
-    friend class string_ritr;
-    friend class string_const_iter;
-    friend class string_const_ritr;
+    using Iter_Ty = std_string::string_iter;
+    using Ritr_Ty = std_string::string_ritr;
+    using cIter_Ty = std_string::string_const_iter;
+    using cRitr_Ty = std_string::string_const_ritr;
+
+    friend class std_string::string_iter;
+    friend class std_string::string_ritr;
+    friend class std_string::string_const_iter;
+    friend class std_string::string_const_ritr;
 
     friend string operator +(char c, const string &s) noexcept;
     friend string operator +(const char *cstr, const string &s) noexcept;
@@ -652,44 +664,44 @@ public:
         _set_tail_zero();
     }
 
-    string_iter begin() noexcept
+    Iter_Ty begin() noexcept
     {
-        return string_iter(ch);
+        return Iter_Ty(ch);
     }
 
-    string_iter end() noexcept
+    Iter_Ty end() noexcept
     {
-        return string_iter(ch + len);
+        return Iter_Ty(ch + len);
     }
 
-    string_ritr rbegin() noexcept
+    Ritr_Ty rbegin() noexcept
     {
-        return string_ritr(ch + len - 1);
+        return Ritr_Ty(ch + len - 1);
     }
 
-    string_ritr rend() noexcept
+    Ritr_Ty rend() noexcept
     {
-        return string_ritr(ch - 1);
+        return Ritr_Ty(ch - 1);
     }
 
-    string_const_iter cbegin() noexcept
+    cIter_Ty cbegin() noexcept
     {
-        return string_const_iter(ch);
+        return cIter_Ty(ch);
     }
 
-    string_const_iter cend() noexcept
+    cIter_Ty cend() noexcept
     {
-        return string_const_iter(ch + len);
+        return cIter_Ty(ch + len);
     }
 
-    string_const_ritr crbegin() noexcept
+    cRitr_Ty crbegin() noexcept
     {
-        return string_const_ritr(ch + len - 1);
+        return cRitr_Ty(ch + len - 1);
     }
 
-    string_const_ritr crend() noexcept
+    cRitr_Ty crend() noexcept
     {
-        return string_const_ritr(ch - 1);
+        return cRitr_Ty(ch - 1);
     }
 
 private:
@@ -799,7 +811,7 @@ private:
     char *ch;
 };
 
-string operator +(char c, const string &s) noexcept
+_INLINE_ string operator +(char c, const string &s) noexcept
 {
     string ret(string::string_max_len_expectation(s.len + 1));
     ret.ch[0] = c;
@@ -810,7 +822,7 @@ string operator +(char c, const string &s) noexcept
     return ret;
 }
 
-string operator +(const char *cstr, const string &s) noexcept
+_INLINE_ string operator +(const char *cstr, const string &s) noexcept
 {
     s64 cstr_len = str_len(cstr);
     string ret(string::string_max_len_expectation(cstr_len + s.len));
@@ -822,41 +834,41 @@ string operator +(const char *cstr, const string &s) noexcept
     return ret;
 }
 
-bool operator ==(const char *cstr, const string &s) noexcept
+_INLINE_ bool operator ==(const char *cstr, const string &s) noexcept
 {
     return str_equal(cstr, s.ch ? s.ch : "");
 }
 
-bool operator !=(const char *cstr, const string &s) noexcept
+_INLINE_ bool operator !=(const char *cstr, const string &s) noexcept
 {
     return !str_equal(cstr, s.ch ? s.ch : "");
 }
 
-bool operator <(const char *cstr, const string &s) noexcept
+_INLINE_ bool operator <(const char *cstr, const string &s) noexcept
 {
     return str_compare(cstr, s.ch ? s.ch : "") < 0;
 }
 
-bool operator >(const char *cstr, const string &s) noexcept
+_INLINE_ bool operator >(const char *cstr, const string &s) noexcept
 {
     return str_compare(cstr, s.ch ? s.ch : "") > 0;
 }
 
-bool operator <=(const char *cstr, const string &s) noexcept
+_INLINE_ bool operator <=(const char *cstr, const string &s) noexcept
 {
     return str_compare(cstr, s.ch ? s.ch : "") <= 0;
 }
 
-bool operator >=(const char *cstr, const string &s) noexcept
+_INLINE_ bool operator >=(const char *cstr, const string &s) noexcept
 {
     return str_compare(cstr, s.ch ? s.ch : "") >= 0;
 }
 
 template<typename Int_Ty>
-string to_string(Int_Ty integer);
+_INLINE_ string to_string(Int_Ty integer);
 
 template<>
-string to_string<u64>(u64 integer) noexcept
+_INLINE_ string to_string<u64>(u64 integer) noexcept
 {
     if (integer == 0)
     {
@@ -880,7 +892,7 @@ string to_string<u64>(u64 integer) noexcept
 }
 
 template<>
-string to_string<s64>(s64 integer) noexcept
+_INLINE_ string to_string<s64>(s64 integer) noexcept
 {
     if (integer == 0)
     {
@@ -913,54 +925,54 @@ string to_string<s64>(s64 integer) noexcept
 }
 
 template<>
-string to_string<u32>(u32 integer) noexcept
+_INLINE_ string to_string<u32>(u32 integer) noexcept
 {
     return to_string<u64>(integer);
 }
 
 template<>
-string to_string<s32>(s32 integer) noexcept
+_INLINE_ string to_string<s32>(s32 integer) noexcept
 {
     return to_string<s64>(integer);
 }
 
 template<>
-string to_string<unsigned int>(unsigned int integer) noexcept
+_INLINE_ string to_string<unsigned int>(unsigned int integer) noexcept
 {
     return to_string<u64>(integer);
 }
 
 template<>
-string to_string<int>(int integer) noexcept
+_INLINE_ string to_string<int>(int integer) noexcept
 {
     return to_string<s64>(integer);
 }
 
 template<>
-string to_string<u16>(u16 integer) noexcept
+_INLINE_ string to_string<u16>(u16 integer) noexcept
 {
     return to_string<u64>(integer);
 }
 
 template<>
-string to_string<s16>(s16 integer) noexcept
+_INLINE_ string to_string<s16>(s16 integer) noexcept
 {
     return to_string<s64>(integer);
 }
 
 template<>
-string to_string<u8>(u8 integer) noexcept
+_INLINE_ string to_string<u8>(u8 integer) noexcept
 {
     return to_string<u64>(integer);
 }
 
 template<>
-string to_string<s8>(s8 integer) noexcept
+_INLINE_ string to_string<s8>(s8 integer) noexcept
 {
     return to_string<s64>(integer);
 }
 
-s32 stoi(const string &str) noexcept
+_INLINE_ s32 stoi(const string &str) noexcept
 {
     if (str.size() == 0)
     {
@@ -999,7 +1011,7 @@ s32 stoi(const string &str) noexcept
     return str[0] == '-' ? -rst : rst;
 }
 
-s64 stoll(const string &str) noexcept
+_INLINE_ s64 stoll(const string &str) noexcept
 {
     if (str.size() == 0)
     {
@@ -1038,6 +1050,6 @@ s64 stoll(const string &str) noexcept
     return str[0] == '-' ? -rst : rst;
 }
 
-END_NS(std)
+}
 
 #endif //# __INT_STRING_HPP__ ends

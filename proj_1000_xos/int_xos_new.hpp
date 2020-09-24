@@ -1,8 +1,8 @@
 /* ********* * ********* * ********* * ********* * *********
  *
- * int_basic_new.hpp
+ * int_xos_new.hpp
  *
- * proj: proj_2000_utils
+ * proj: proj_1000_xos
  * desc: basic new operator
  * autr: dexterdreeeam
  * date: 20200907
@@ -10,8 +10,8 @@
  *
  ********* * ********* * ********* * ********* * ********* */
 
-#if !defined (__INT_BASIC_NEW_HPP__)
-#define __INT_BASIC_NEW_HPP__
+#if !defined (__INT_XOS_NEW_HPP__)
+#define __INT_XOS_NEW_HPP__
 
 void *operator new(size_t sz)
 {
@@ -50,3 +50,4 @@ constexpr auto right_value_type(Ty &e) noexcept -> Ty&&
 }
 
 #endif //# __INT_BASIC_NEW_HPP__ ends
+__INT_XOS_NEW_HPP__

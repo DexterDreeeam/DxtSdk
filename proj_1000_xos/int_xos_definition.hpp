@@ -35,9 +35,6 @@
 #define POINTER_BYTES (8)
 #define POINTER_BITS  (64)
 
-#define START_NS(ns)    namespace ns {
-#define END_NS(ns)      }
-
 typedef    unsigned               char  u8;
 typedef      signed               char  s8;
 typedef    unsigned  short         int  u16;

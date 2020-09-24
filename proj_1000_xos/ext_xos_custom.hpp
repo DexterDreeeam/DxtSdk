@@ -46,7 +46,7 @@
 // ===========================
 
 
-#define LOG_FOLDER "C:\\DXT_LOG\\"
+#define BASE_FOLDER "C:/dxtSDK"
 
 
 #endif //# __EXT_XOS_CUSTOM_HPP__ ends

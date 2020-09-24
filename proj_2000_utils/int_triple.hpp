@@ -13,7 +13,8 @@
 #if !defined (__INT_TRIPLE_HPP__)
 #define __INT_TRIPLE_HPP__
 
-START_NS(std)
+namespace std
+{
 
 template<typename Ty1, typename Ty2, typename Ty3>
 class triple
@@ -98,6 +99,6 @@ public:
     Ty3 third;
 };
 
-END_NS(std)
+}
 
 #endif //# __INT_TRIPLE_HPP__ ends

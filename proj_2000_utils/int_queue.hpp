@@ -13,7 +13,8 @@
 #if !defined (__INT_QUEUE_HPP__)
 #define __INT_QUEUE_HPP__
 
-START_NS(std)
+namespace std
+{
 
 const s64 queue_unit_extent = 4LL;
 const s64 queue_cap_max = 1LL << 30;
@@ -188,6 +189,6 @@ private:
     s64 start_at;
 };
 
-END_NS(std)
+}
 
 #endif //# __INT_QUEUE_HPP__ ends

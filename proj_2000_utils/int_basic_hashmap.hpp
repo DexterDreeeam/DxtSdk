@@ -13,10 +13,20 @@
 #if !defined (__INT_BASIC_HASHMAP_HPP__)
 #define __INT_BASIC_HASHMAP_HPP__
 
-START_NS(std)
+#include "int_basic_slot_allocator.hpp"
+#include "int_pair.hpp"
+
+namespace std
+{
+
+namespace std_hashmap
+{
 
 struct hashmap_dummy_type
 {};
+
+template<typename Key_Ty, typename Val_Ty = hashmap_dummy_type>
+class hashmap;
 
 class hashmap_base_node;
 
@@ -37,9 +47,6 @@ class hashmap_const_iter;
 
 template<typename Container_Ty>
 class hashmap_const_ritr;
-
-template<typename Key_Ty, typename Val_Ty = hashmap_dummy_type>
-class hashmap;
 
 class hashmap_base_node
 {
@@ -66,7 +73,17 @@ protected:
         return prev;
     }
 
+    hashmap_base_node *const &myprev() const noexcept
+    {
+        return prev;
+    }
+
     hashmap_base_node *&mynext() noexcept
+    {
+        return next;
+    }
+
+    hashmap_base_node *const &mynext() const noexcept
     {
         return next;
     }
@@ -588,7 +605,7 @@ protected:
         allocator(),
         maplen(hashmap_least_maplen),
         sz(0),
-        slots((hashmap_base_node**)memory_alloc_zero(sizeof(void*) * maplen))
+        slots((BaseNode_Ty**)memory_alloc_zero(sizeof(void*) * maplen))
     {
         assert(_self_exam());
     }
@@ -597,7 +614,7 @@ protected:
         allocator(),
         maplen(max(expected_maplen, hashmap_least_maplen)),
         sz(0),
-        slots((hashmap_base_node**)memory_alloc_zero(sizeof(void*) * maplen))
+        slots((BaseNode_Ty**)memory_alloc_zero(sizeof(void*) * maplen))
     {
         assert(_self_exam());
     }
@@ -606,11 +623,11 @@ protected:
         allocator(rhs.sz),
         maplen(rhs.maplen),
         sz(rhs.sz),
-        slots((hashmap_base_node**)memory_alloc_zero(sizeof(void*) * maplen))
+        slots((BaseNode_Ty**)memory_alloc_zero(sizeof(void*) * maplen))
     {
         for (s64 i = 0; i < maplen; ++i)
         {
-            hashmap_base_node *nod = rhs.slots[i];
+            BaseNode_Ty *nod = rhs.slots[i];
             while (nod)
             {
                 _insert_node_data_type(*((Node_Ty*)nod)->mydata(), nod->myhash());
@@ -624,7 +641,7 @@ protected:
         allocator(right_value_type(rhs.allocator)),
         maplen(rhs.maplen),
         sz(rhs.sz),
-        slots((hashmap_base_node**)memory_alloc_zero(sizeof(void*) * maplen))
+        slots((BaseNode_Ty**)memory_alloc_zero(sizeof(void*) * maplen))
     {
         for (s64 i = 0; i < maplen; ++i)
         {
@@ -647,10 +664,10 @@ protected:
         sz = 0;
         for (s64 i = 0; i < maplen; ++i)
         {
-            hashmap_base_node *nod = slots[i];
+            BaseNode_Ty *nod = slots[i];
             while (nod)
             {
-                hashmap_base_node *next_nod = nod->mynext();
+                BaseNode_Ty *next_nod = nod->mynext();
                 ((Node_Ty*)nod)->~Node_Ty();
                 allocator.put(nod);
                 nod = next_nod;
@@ -659,10 +676,10 @@ protected:
         memory_free(slots);
 
         maplen = rhs.maplen;
-        slots = (hashmap_base_node**)memory_alloc_zero(sizeof(void*) * maplen);
+        slots = (BaseNode_Ty**)memory_alloc_zero(sizeof(void*) * maplen);
         for (s64 i = 0; i < maplen; ++i)
         {
-            hashmap_base_node *nod = rhs.slots[i];
+            BaseNode_Ty *nod = rhs.slots[i];
             while (nod)
             {
                 _insert_node_data_type(*((Node_Ty*)nod)->mydata(), nod->myhash());
@@ -678,7 +695,7 @@ protected:
     {
         allocator = right_value_type(rhs.allocator);
         maplen = rhs.maplen;
-        slots = (hashmap_base_node**)memory_alloc_zero(sizeof(void*) * maplen);
+        slots = (BaseNode_Ty**)memory_alloc_zero(sizeof(void*) * maplen);
         for (s64 i = 0; i < maplen; ++i)
         {
             slots[i] = rhs.slots[i];
@@ -695,7 +712,7 @@ protected:
         maplen = hashmap_least_maplen;
         sz = 0;
         memory_free(slots);
-        slots = (hashmap_base_node**)memory_alloc_zero(sizeof(void*) * maplen);
+        slots = (BaseNode_Ty**)memory_alloc_zero(sizeof(void*) * maplen);
         assert(_self_exam());
     }
 
@@ -736,10 +753,10 @@ protected:
         return true;
     }
 
-    hashmap_base_node *_peek_node(const Key_Ty &k, u64 hs) noexcept
+    BaseNode_Ty *_peek_node(const Key_Ty &k, u64 hs) noexcept
     {
         s64 slot_idx = hs % maplen;
-        hashmap_base_node *ptr = slots[slot_idx];
+        BaseNode_Ty *ptr = slots[slot_idx];
         while (ptr && ((Node_Ty*)ptr)->mykey() != k)
         {
             ptr = ptr->mynext();
@@ -747,10 +764,21 @@ protected:
         return ptr;
     }
 
-    hashmap_base_node *_insert_node(const Key_Ty &k, u64 hs) noexcept
+    const BaseNode_Ty *_peek_node(const Key_Ty &k, u64 hs) const noexcept
     {
         s64 slot_idx = hs % maplen;
-        hashmap_base_node *nod = (hashmap_base_node*)allocator.get();
+        const BaseNode_Ty *ptr = slots[slot_idx];
+        while (ptr && ((const Node_Ty*)ptr)->mykey() != k)
+        {
+            ptr = ptr->mynext();
+        }
+        return ptr;
+    }
+
+    BaseNode_Ty *_insert_node(const Key_Ty &k, u64 hs) noexcept
+    {
+        s64 slot_idx = hs % maplen;
+        BaseNode_Ty *nod = (BaseNode_Ty*)allocator.get();
         new (nod) Node_Ty(k, hs, nullptr, slots[slot_idx]);
         if (slots[slot_idx])
         {
@@ -759,7 +787,7 @@ protected:
         slots[slot_idx] = nod;
         ++sz;
         s64 chain_len = 1;
-        hashmap_base_node *next = nod->mynext();
+        BaseNode_Ty *next = nod->mynext();
         while (next)
         {
             ++chain_len;
@@ -773,10 +801,10 @@ protected:
         return nod;
     }
 
-    hashmap_base_node *_insert_node(const Key_Ty &k, const Val_Ty &v, u64 hs) noexcept
+    BaseNode_Ty *_insert_node(const Key_Ty &k, const Val_Ty &v, u64 hs) noexcept
     {
         s64 slot_idx = hs % maplen;
-        hashmap_base_node *nod = (hashmap_base_node*)allocator.get();
+        BaseNode_Ty *nod = (BaseNode_Ty*)allocator.get();
         new (nod) Node_Ty(k, v, hs, nullptr, slots[slot_idx]);
         if (slots[slot_idx])
         {
@@ -785,7 +813,7 @@ protected:
         slots[slot_idx] = nod;
         ++sz;
         s64 chain_len = 1;
-        hashmap_base_node *next = nod->mynext();
+        BaseNode_Ty *next = nod->mynext();
         while (next)
         {
             ++chain_len;
@@ -799,10 +827,10 @@ protected:
         return nod;
     }
 
-    hashmap_base_node *_insert_node(const Key_Ty &k, Val_Ty &&v, u64 hs) noexcept
+    BaseNode_Ty *_insert_node(const Key_Ty &k, Val_Ty &&v, u64 hs) noexcept
     {
         s64 slot_idx = hs % maplen;
-        hashmap_base_node *nod = (hashmap_base_node*)allocator.get();
+        BaseNode_Ty *nod = (BaseNode_Ty*)allocator.get();
         new (nod) Node_Ty(k, v, hs, nullptr, slots[slot_idx]);
         if (slots[slot_idx])
         {
@@ -811,7 +839,7 @@ protected:
         slots[slot_idx] = nod;
         ++sz;
         s64 chain_len = 1;
-        hashmap_base_node *next = nod->mynext();
+        BaseNode_Ty *next = nod->mynext();
         while (next)
         {
             ++chain_len;
@@ -828,7 +856,7 @@ protected:
     void _insert_node_data_type(const NodeData_Ty &node_data, u64 hs) noexcept
     {
         s64 slot_idx = hs % maplen;
-        hashmap_base_node *nod = (hashmap_base_node*)allocator.get();
+        BaseNode_Ty *nod = (BaseNode_Ty*)allocator.get();
         new (nod) Node_Ty(node_data, hs, nullptr, slots[slot_idx]);
         if (slots[slot_idx])
         {
@@ -837,7 +865,7 @@ protected:
         slots[slot_idx] = nod;
         ++sz;
         s64 chain_len = 1;
-        hashmap_base_node *next = nod->mynext();
+        BaseNode_Ty *next = nod->mynext();
         while (next)
         {
             ++chain_len;
@@ -850,9 +878,9 @@ protected:
         assert(_self_exam());
     }
 
-    hashmap_base_node *_check_insert(const Key_Ty &k, u64 hs) noexcept
+    BaseNode_Ty *_check_insert(const Key_Ty &k, u64 hs) noexcept
     {
-        hashmap_base_node *nod = _peek_node(k, hs);
+        BaseNode_Ty *nod = _peek_node(k, hs);
         if (!nod)
         {
             nod = _insert_node(k, hs);
@@ -861,9 +889,9 @@ protected:
         return nod;
     }
 
-    hashmap_base_node *_check_insert(const Key_Ty &k, const Val_Ty &v, u64 hs) noexcept
+    BaseNode_Ty *_check_insert(const Key_Ty &k, const Val_Ty &v, u64 hs) noexcept
     {
-        hashmap_base_node *nod = _peek_node(k, hs);
+        BaseNode_Ty *nod = _peek_node(k, hs);
         s64 slot_idx = hs % maplen;
         if (nod)
         {
@@ -877,9 +905,9 @@ protected:
         return nod;
     }
 
-    hashmap_base_node *_check_insert(const Key_Ty &k, Val_Ty &&v, u64 hs) noexcept
+    BaseNode_Ty *_check_insert(const Key_Ty &k, Val_Ty &&v, u64 hs) noexcept
     {
-        hashmap_base_node *nod = _peek_node(k, hs);
+        BaseNode_Ty *nod = _peek_node(k, hs);
         s64 slot_idx = hs % maplen;
         if (nod)
         {
@@ -893,7 +921,7 @@ protected:
         return nod;
     }
 
-    void _erase_node(hashmap_base_node *nod)
+    void _erase_node(BaseNode_Ty *nod)
     {
         assert(nod);
         s64 slot_idx = nod->myhash() % maplen;
@@ -924,7 +952,7 @@ protected:
 
     bool _check_erase(const Key_Ty &k, u64 hs) noexcept
     {
-        hashmap_base_node *nod = _peek_node(k, hs);
+        BaseNode_Ty *nod = _peek_node(k, hs);
         if (nod)
         {
             _erase_node(nod);
@@ -939,16 +967,16 @@ protected:
     bool _reorg(s64 new_maplen) noexcept
     {
         assert(new_maplen > maplen);
-        hashmap_base_node **new_slots = (hashmap_base_node**)memory_alloc_zero(sizeof(void*) * new_maplen);
+        BaseNode_Ty **new_slots = (BaseNode_Ty**)memory_alloc_zero(sizeof(void*) * new_maplen);
         bool good_reorg = true;
         for (s64 i = 0; i < maplen; ++i)
         {
-            hashmap_base_node *nod = slots[i];
+            BaseNode_Ty *nod = slots[i];
             while (nod)
             {
-                hashmap_base_node *next = nod->mynext();
+                BaseNode_Ty *next = nod->mynext();
                 s64 slot_idx = nod->myhash() % new_maplen;
-                hashmap_base_node *new_nod = (hashmap_base_node*)allocator.get();
+                BaseNode_Ty *new_nod = (BaseNode_Ty*)allocator.get();
                 new (new_nod) Node_Ty(*((Node_Ty*)nod)->mydata(), nod->myhash(), nullptr, new_slots[slot_idx]);
                 if (new_slots[slot_idx])
                 {
@@ -983,7 +1011,7 @@ protected:
         assert_info(0, "Optimize your Hash() function to make it distributed better.");
     }
 
-    hashmap_base_node *_next_node(hashmap_base_node *nod) const noexcept
+    BaseNode_Ty *_next_node(BaseNode_Ty *nod) const noexcept
     {
         if (nod && nod->mynext())
         {
@@ -992,7 +1020,7 @@ protected:
         s64 slot_idx = nod ? nod->myhash() % maplen : -1;
         ++slot_idx;
         assert(slot_idx <= maplen);
-        hashmap_base_node *next = nullptr;
+        BaseNode_Ty *next = nullptr;
         while (next == nullptr && slot_idx < maplen)
         {
             next = slots[slot_idx];
@@ -1001,7 +1029,7 @@ protected:
         return next;
     }
 
-    hashmap_base_node *_prev_node(hashmap_base_node *nod) const noexcept
+    BaseNode_Ty *_prev_node(BaseNode_Ty *nod) const noexcept
     {
         if (nod && nod->myprev())
         {
@@ -1009,7 +1037,7 @@ protected:
         }
         s64 slot_idx = nod ? nod->myhash() % maplen : maplen;
         --slot_idx;
-        hashmap_base_node *prev = nullptr;
+        BaseNode_Ty *prev = nullptr;
         while (prev == nullptr && slot_idx >= 0)
         {
             prev = slots[slot_idx];
@@ -1024,7 +1052,7 @@ protected:
 
     Iter_Ty _find(const Key_Ty &k, u64 hs) noexcept
     {
-        hashmap_base_node *nod = _peek_node(k, hs);
+        BaseNode_Ty *nod = _peek_node(k, hs);
         return Iter_Ty(this, nod);
     }
 
@@ -1080,9 +1108,11 @@ private:
     slot_allocator<sizeof(Node_Ty)> allocator;
     s64 maplen;
     s64 sz;
-    hashmap_base_node **slots;
+    BaseNode_Ty **slots;
 };
 
-END_NS(std)
+}
+
+}
 
 #endif //# __INT_BASIC_HASHMAP_HPP__ ends

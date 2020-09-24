@@ -13,13 +13,17 @@
 #if !defined (__INT_DEQUE_HPP__)
 #define __INT_DEQUE_HPP__
 
-START_NS(std)
+namespace std
+{
 
 const s64 deque_block_min_size = 1LL << 4;
 const s64 deque_block_max_size = 1LL << 10;
 
 template<typename Ty>
 class deque;
+
+namespace std_deque
+{
 
 template<typename Ctnr_Ty>
 class deque_base_iter;
@@ -596,20 +600,22 @@ public:
     }
 };
 
+}
+
 template<typename Ty>
 class deque
 {
     using Self_Ty = deque<Ty>;
-    using Blck_Ty = deque_block<Ty>;
-    using Iter_Ty = deque_iter<Self_Ty>;
-    using Ritr_Ty = deque_ritr<Self_Ty>;
-    using cIter_Ty = deque_const_iter<Self_Ty>;
-    using cRitr_Ty = deque_const_ritr<Self_Ty>;
+    using Blck_Ty = std_deque::deque_block<Ty>;
+    using Iter_Ty = std_deque::deque_iter<Self_Ty>;
+    using Ritr_Ty = std_deque::deque_ritr<Self_Ty>;
+    using cIter_Ty = std_deque::deque_const_iter<Self_Ty>;
+    using cRitr_Ty = std_deque::deque_const_ritr<Self_Ty>;
 
-    friend class deque_iter<Self_Ty>;
-    friend class deque_ritr<Self_Ty>;
-    friend class deque_const_iter<Self_Ty>;
-    friend class deque_const_ritr<Self_Ty>;
+    friend class std_deque::deque_iter<Self_Ty>;
+    friend class std_deque::deque_ritr<Self_Ty>;
+    friend class std_deque::deque_const_iter<Self_Ty>;
+    friend class std_deque::deque_const_ritr<Self_Ty>;
 
 public:
     deque() :
@@ -920,6 +926,6 @@ private:
     s64 sz;
 };
 
-END_NS(std)
+}
 
 #endif //# __INT_DEQUE_HPP__ ends

@@ -110,9 +110,10 @@ static _INLINE_ _NOALIAS_ f64 __atan2(f64 x, f64 y)
     return windows_ns::atan2(x, y);
 }
 
-START_NS(windows_ns)
+namespace windows_ns
+{
 #include <intrin.h>
-END_NS(windows_ns)
+}
 
 typedef windows_ns::__m128  simd4xf32;
 typedef windows_ns::__m256d simd4xf64;

@@ -14,65 +14,68 @@
 #if !defined (__INT_BASIC_HASH_HPP__)
 #define __INT_BASIC_HASH_HPP__
 
-START_NS(std)
+#include "int_string.hpp"
+
+namespace std
+{
 
 template<typename Ptr_Ty>
-u64 Hash(const Ptr_Ty *p) noexcept
+_INLINE_ u64 Hash(const Ptr_Ty *p) noexcept
 {
     return reinterpret_cast<u64>(p);
 }
 
-u64 Hash(int k) noexcept
+_INLINE_ u64 Hash(int k) noexcept
 {
     return static_cast<u64>(s64(k));
 }
 
-u64 Hash(unsigned int k) noexcept
+_INLINE_ u64 Hash(unsigned int k) noexcept
 {
     return static_cast<u64>(k);
 }
 
-u64 Hash(s8 k) noexcept
+_INLINE_ u64 Hash(s8 k) noexcept
 {
     return static_cast<u64>(s64(k));
 }
 
-u64 Hash(u8 k) noexcept
+_INLINE_ u64 Hash(u8 k) noexcept
 {
     return static_cast<u64>(k);
 }
 
-u64 Hash(s16 k) noexcept
+_INLINE_ u64 Hash(s16 k) noexcept
 {
     return static_cast<u64>(s64(k));
 }
 
-u64 Hash(u16 k) noexcept
+_INLINE_ u64 Hash(u16 k) noexcept
 {
     return static_cast<u64>(k);
 }
 
-u64 Hash(s32 k) noexcept
+_INLINE_ u64 Hash(s32 k) noexcept
 {
     return static_cast<u64>(s64(k));
 }
 
-u64 Hash(u32 k) noexcept
+_INLINE_ u64 Hash(u32 k) noexcept
 {
     return static_cast<u64>(k);
 }
 
-u64 Hash(s64 k) noexcept
+_INLINE_ u64 Hash(s64 k) noexcept
 {
     return static_cast<u64>(k);
 }
 
-u64 Hash(u64 k) noexcept
+_INLINE_ u64 Hash(u64 k) noexcept
 {
     return k;
 }
 
-u64 Hash(const string &s) noexcept
+_INLINE_ u64 Hash(const string &s) noexcept
 {
     s64 len = s.size();
     u64 hs = static_cast<u64>(magic_s64);
@@ -86,7 +89,7 @@ u64 Hash(const string &s) noexcept
     return hs;
 }
 
-//u64 Hash(const char *cstr) noexcept
+//_INLINE_ u64 Hash(const char *cstr) noexcept
 //{
 //    s64 len = str_len(cstr);
 //    u64 hs = static_cast<u64>(magic_s64);
@@ -100,6 +103,6 @@ u64 Hash(const string &s) noexcept
 //    return hs;
 //}
 
-END_NS(std)
+}
 
 #endif //# __INT_BASIC_HASH_HPP__ ends

@@ -15,8 +15,6 @@
 
 #include "../proj_1000_xos/ext_xos_interface.hpp"
 
-#include "int_basic_new.hpp"
-#include "int_basic_slot_allocator.hpp"
 #include "int_pair.hpp"
 #include "int_triple.hpp"
 
@@ -28,12 +26,9 @@
 #include "int_queue.hpp"
 #include "int_deque.hpp"
 
-#include "int_basic_rbtree.hpp"
 #include "int_set.hpp"
 #include "int_map.hpp"
 
-#include "int_basic_hash.hpp"
-#include "int_basic_hashmap.hpp"
 #include "int_unordered_set.hpp"
 #include "int_unordered_map.hpp"
 
