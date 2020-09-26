@@ -32,4 +32,6 @@
 #include "int_unordered_set.hpp"
 #include "int_unordered_map.hpp"
 
+#include "int_selectee.hpp"
+
 #endif //# __EXT_UTILS_INTERFACE_HPP__ ends

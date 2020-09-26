@@ -13,6 +13,7 @@
 #if !defined (__INT_STACK_HPP__)
 #define __INT_STACK_HPP__
 
+#include "../proj_1000_xos/ext_xos_interface.hpp"
 #include "int_vector.hpp"
 
 namespace std

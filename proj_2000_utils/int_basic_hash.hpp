@@ -14,6 +14,7 @@
 #if !defined (__INT_BASIC_HASH_HPP__)
 #define __INT_BASIC_HASH_HPP__
 
+#include "../proj_1000_xos/ext_xos_interface.hpp"
 #include "int_string.hpp"
 
 namespace std

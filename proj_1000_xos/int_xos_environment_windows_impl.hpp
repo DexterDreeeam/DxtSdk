@@ -465,10 +465,66 @@ _INLINE_ boole output_file_write(outf f, const char *content)
     }
 }
 
+_INLINE_ boole output_file_write(outf f, const char *content, s64 write_len)
+{
+    if (windows_ns::WriteFile(f, content, write_len, nullptr, nullptr))
+    {
+        return boole_true;
+    }
+    else
+    {
+        return boole_false;
+    }
+}
+
 _INLINE_ boole output_file_destroy(outf f)
 {
     windows_ns::FlushFileBuffers(f);
     if (windows_ns::CloseHandle(f))
+    {
+        return boole_true;
+    }
+    else
+    {
+        return boole_false;
+    }
+}
+
+_INLINE_ inpf input_file_create(const char *path)
+{
+    inpf f = windows_ns::CreateFileA(
+        path, FILE_GENERIC_READ, FILE_SHARE_READ, nullptr,
+        OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+
+    assert(f);
+    return f;
+}
+
+_INLINE_ s64 input_file_read(inpf f, void *buf, s64 want_read)
+{
+    u32 actual_read = 0;
+    if (windows_ns::ReadFile(f, buf, want_read, &actual_read, nullptr) == 0)
+    {
+        assert(0);
+    }
+    return actual_read;
+}
+
+_INLINE_ boole input_file_destroy(inpf f)
+{
+    if (windows_ns::CloseHandle(f))
+    {
+        return boole_true;
+    }
+    else
+    {
+        return boole_false;
+    }
+}
+
+_INLINE_ boole delete_file(const char *path)
+{
+    if (windows_ns::DeleteFileA(path))
     {
         return boole_true;
     }

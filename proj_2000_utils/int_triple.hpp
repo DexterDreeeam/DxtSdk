@@ -13,6 +13,8 @@
 #if !defined (__INT_TRIPLE_HPP__)
 #define __INT_TRIPLE_HPP__
 
+#include "../proj_1000_xos/ext_xos_interface.hpp"
+
 namespace std
 {
 

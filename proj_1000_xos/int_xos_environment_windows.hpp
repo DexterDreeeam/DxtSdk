@@ -60,6 +60,28 @@ namespace windows_ns
 
 }
 
+typedef                u64  hndl;
+typedef windows_ns::HANDLE  thrd;
+typedef windows_ns::HANDLE  lock;
+typedef windows_ns::HANDLE  evnt;
+typedef windows_ns::HANDLE  outf;
+typedef windows_ns::HANDLE  inpf;
+typedef       volatile s64 *spin;
+typedef               hndl  timr;
+typedef void (Callback_Func)(void *param);
+
+typedef struct
+{
+    s32 year;
+    s32 month;
+    s32 day;
+    s32 week_day;
+    s32 hour;
+    s32 minute;
+    s32 second;
+    s32 millisec;
+} date;
+
 _INLINE_ s32   atom_increment(s32 volatile &x);
 _INLINE_ s64   atom_increment(s64 volatile &x);
 _INLINE_ s32   atom_decrement(s32 volatile &x);
@@ -80,27 +102,6 @@ _INLINE_ void  memory_set(void *addr, u8 val, u64 sz);
 _INLINE_ void  memory_copy(const void *src, void *dst, u64 sz);
 _INLINE_ void *memory_alloc_copy(const void *src, u64 alloc_sz, u64 copy_sz);
 _INLINE_ void  memory_barrier(void);
-
-typedef                u64  hndl;
-typedef windows_ns::HANDLE  thrd;
-typedef windows_ns::HANDLE  lock;
-typedef windows_ns::HANDLE  evnt;
-typedef windows_ns::HANDLE  outf;
-typedef       volatile s64 *spin;
-typedef               hndl  timr;
-typedef void (Callback_Func)(void *param);
-
-typedef struct
-{
-    s32 year;
-    s32 month;
-    s32 day;
-    s32 week_day;
-    s32 hour;
-    s32 minute;
-    s32 second;
-    s32 millisec;
-} date;
 
 _INLINE_ thrd  thrd_create(Callback_Func *fn, void *param);
 _INLINE_ u64   thrd_myid();
@@ -138,7 +139,14 @@ _INLINE_ date  date_query();
 
 _INLINE_ outf  output_file_create(const char *path);
 _INLINE_ boole output_file_write(outf f, const char *content);
+_INLINE_ boole output_file_write(outf f, const char *content, s64 write_len);
 _INLINE_ boole output_file_destroy(outf f);
+
+_INLINE_ inpf  input_file_create(const char *path);
+_INLINE_ s64   input_file_read(inpf f, void *buf, s64 want_read);
+_INLINE_ boole input_file_destroy(inpf f);
+
+_INLINE_ boole delete_file(const char *path);
 
 #include "int_xos_environment_windows_impl.hpp"
 

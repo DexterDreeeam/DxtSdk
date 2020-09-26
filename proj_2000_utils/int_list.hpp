@@ -13,6 +13,7 @@
 #if !defined (__INT_LIST_HPP__)
 #define __INT_LIST_HPP__
 
+#include "../proj_1000_xos/ext_xos_interface.hpp"
 #include "int_basic_slot_allocator.hpp"
 
 namespace std

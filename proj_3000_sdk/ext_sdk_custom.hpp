@@ -1,19 +1,19 @@
 /* ********* * ********* * ********* * ********* * *********
  *
- * ext_xos_custom.hpp
+ * ext_sdk_custom.hpp
  *
- * proj: proj_1000_xos
+ * proj: proj_3000_sdk
  * desc: external user custom settings
  * autr: dexterdreeeam
  * date: 20200827
  * tips: define macro 'I_AM_WINDOWS' or 'I_AM_LINUX'
  *       in this file for cross platform
- *       define macro trace level 'DEBUG_FULL', 'DEBUG_HALF', 'DEBUG_NONE'
+ *       define macro trace level 'DEBUG_FULL', 'DEBUG_CRIT', 'DEBUG_HALF', 'DEBUG_NONE'
  *
  ********* * ********* * ********* * ********* * ********* */
 
-#if !defined (__EXT_XOS_CUSTOM_HPP__)
-#define __EXT_XOS_CUSTOM_HPP__
+#if !defined (__EXT_SDK_CUSTOM_HPP__)
+#define __EXT_SDK_CUSTOM_HPP__
 
 // ===========================
 #define I_AM_WINDOWS
@@ -46,7 +46,7 @@
 // ===========================
 
 
-#define BASE_FOLDER "C:/dxtSDK"
+#define BASE_LOG_FOLDER "C:/dxtSDK/"
 
 
-#endif //# __EXT_XOS_CUSTOM_HPP__ ends
+#endif //# __EXT_SDK_CUSTOM_HPP__ ends
