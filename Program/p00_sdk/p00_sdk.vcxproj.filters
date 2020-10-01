@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="c100_xos">
+      <UniqueIdentifier>{5d5624bf-6871-4a0e-84ff-8995d771501c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="c120_utils">
+      <UniqueIdentifier>{552d31eb-9dec-4406-a931-57d27e219f25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="c150_logs">
+      <UniqueIdentifier>{b89efdb7-2f89-4118-817e-fabe4076bb0a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="c100_xos\ext_xos_interface.hpp">
+      <Filter>c100_xos</Filter>
+    </ClInclude>
+    <ClInclude Include="c100_xos\int_xos_definition.hpp">
+      <Filter>c100_xos</Filter>
+    </ClInclude>
+    <ClInclude Include="c100_xos\int_xos_environment.hpp">
+      <Filter>c100_xos</Filter>
+    </ClInclude>
+    <ClInclude Include="c100_xos\int_xos_environment_linux.hpp">
+      <Filter>c100_xos</Filter>
+    </ClInclude>
+    <ClInclude Include="c100_xos\int_xos_environment_windows.hpp">
+      <Filter>c100_xos</Filter>
+    </ClInclude>
+    <ClInclude Include="c100_xos\int_xos_environment_windows_impl.hpp">
+      <Filter>c100_xos</Filter>
+    </ClInclude>
+    <ClInclude Include="c100_xos\int_xos_math.hpp">
+      <Filter>c100_xos</Filter>
+    </ClInclude>
+    <ClInclude Include="c100_xos\int_xos_math_impl.hpp">
+      <Filter>c100_xos</Filter>
+    </ClInclude>
+    <ClInclude Include="c100_xos\int_xos_new.hpp">
+      <Filter>c100_xos</Filter>
+    </ClInclude>
+    <ClInclude Include="c120_utils\ext_utils_interface.hpp">
+      <Filter>c120_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="c120_utils\int_array.hpp">
+      <Filter>c120_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="c120_utils\int_basic_hash.hpp">
+      <Filter>c120_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="c120_utils\int_basic_hashmap.hpp">
+      <Filter>c120_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="c120_utils\int_basic_rbtree.hpp">
+      <Filter>c120_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="c120_utils\int_basic_slot_allocator.hpp">
+      <Filter>c120_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="c120_utils\int_deque.hpp">
+      <Filter>c120_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="c120_utils\int_list.hpp">
+      <Filter>c120_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="c120_utils\int_map.hpp">
+      <Filter>c120_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="c120_utils\int_pair.hpp">
+      <Filter>c120_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="c120_utils\int_queue.hpp">
+      <Filter>c120_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="c120_utils\int_safe_queue.hpp">
+      <Filter>c120_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="c120_utils\int_safe_selectee.hpp">
+      <Filter>c120_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="c120_utils\int_set.hpp">
+      <Filter>c120_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="c120_utils\int_stack.hpp">
+      <Filter>c120_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="c120_utils\int_string.hpp">
+      <Filter>c120_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="c120_utils\int_triple.hpp">
+      <Filter>c120_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="c120_utils\int_unordered_map.hpp">
+      <Filter>c120_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="c120_utils\int_unordered_set.hpp">
+      <Filter>c120_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="c120_utils\int_vector.hpp">
+      <Filter>c120_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="c150_logs\ext_logs_interface.hpp">
+      <Filter>c150_logs</Filter>
+    </ClInclude>
+    <ClInclude Include="c150_logs\int_logs_autotrace.hpp">
+      <Filter>c150_logs</Filter>
+    </ClInclude>
+    <ClInclude Include="c150_logs\int_logs_system.hpp">
+      <Filter>c150_logs</Filter>
+    </ClInclude>
+    <ClInclude Include="ext_sdk_interface.hpp" />
+    <ClInclude Include="int_sdk_custom.hpp" />
+  </ItemGroup>
+</Project>
