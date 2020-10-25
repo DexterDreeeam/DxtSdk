@@ -1,0 +1,7 @@
+!/DxtTS/
+
+/Program/temp/
+/Program/.vs/
+*.ilk
+*.pdb
+*.exe
