@@ -12,6 +12,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ext_sdk_interface.hpp" />
+    <ClInclude Include="int_sdk_custom.hpp" />
+    <ClInclude Include="int_sdk_precompile.hpp" />
     <ClInclude Include="c100_xos\ext_xos_interface.hpp">
       <Filter>c100_xos</Filter>
     </ClInclude>
@@ -108,7 +111,5 @@
     <ClInclude Include="c150_logs\int_logs_system.hpp">
       <Filter>c150_logs</Filter>
     </ClInclude>
-    <ClInclude Include="ext_sdk_interface.hpp" />
-    <ClInclude Include="int_sdk_custom.hpp" />
   </ItemGroup>
 </Project>

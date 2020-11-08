@@ -13,7 +13,7 @@
 #if !defined (__EXT_UTILS_INTERFACE_HPP__)
 #define __EXT_UTILS_INTERFACE_HPP__
 
-#include "../c100_xos/ext_xos_interface.hpp"
+#include "c100_xos/ext_xos_interface.hpp"
 
 #include "int_pair.hpp"
 #include "int_triple.hpp"

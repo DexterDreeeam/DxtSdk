@@ -13,7 +13,7 @@
 #if !defined (__EXT_LOGS_INTERFACE_HPP__)
 #define __EXT_LOGS_INTERFACE_HPP__
 
-#include "../c100_xos/ext_xos_interface.hpp"
+#include "c100_xos/ext_xos_interface.hpp"
 #include "int_logs_system.hpp"
 #include "int_logs_autotrace.hpp"
 

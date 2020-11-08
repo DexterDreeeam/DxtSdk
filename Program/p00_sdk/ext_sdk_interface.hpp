@@ -13,6 +13,7 @@
 #if !defined (__EXT_SDK_INTERFACE_HPP__)
 #define __EXT_SDK_INTERFACE_HPP__
 
+#include "int_sdk_precompile.hpp"
 #include "int_sdk_custom.hpp"
 #include "c100_xos/ext_xos_interface.hpp"
 #include "c120_utils/ext_utils_interface.hpp"
