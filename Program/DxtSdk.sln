@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "p00_sdk", "p00_sdk\p00_sdk.vcxproj", "{8F536607-AEF9-4692-8FF4-DC359567B541}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "p05_window", "p05_window\p05_window.vcxproj", "{BFF93311-BA14-48DE-8754-594536542E6C}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "p99_main", "p99_main\p99_main.vcxproj", "{EAE4A9F9-2F05-40EF-B3A0-8DC9E7DB2946}"
 EndProject
 Global
@@ -14,6 +16,8 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{8F536607-AEF9-4692-8FF4-DC359567B541}.Release|x64.ActiveCfg = Release|x64
 		{8F536607-AEF9-4692-8FF4-DC359567B541}.Release|x64.Build.0 = Release|x64
+		{BFF93311-BA14-48DE-8754-594536542E6C}.Release|x64.ActiveCfg = Release|x64
+		{BFF93311-BA14-48DE-8754-594536542E6C}.Release|x64.Build.0 = Release|x64
 		{EAE4A9F9-2F05-40EF-B3A0-8DC9E7DB2946}.Release|x64.ActiveCfg = Release|x64
 		{EAE4A9F9-2F05-40EF-B3A0-8DC9E7DB2946}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
