@@ -6,3 +6,5 @@
 *.pdb
 *.user
 *.ilk
+*.iobj
+*.ipdb
