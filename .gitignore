@@ -2,6 +2,9 @@
 
 /Program/temp/
 /Program/.vs/
-*.ilk
-*.pdb
 *.exe
+*.pdb
+*.user
+*.ilk
+*.iobj
+*.ipdb
