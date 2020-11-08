@@ -48,5 +48,7 @@
 
 #define BASE_LOG_FOLDER "C:/dxtSDK/"
 
+#define EXECUTE_PROCESS_NAME "p99_main"
+
 
 #endif //# __INT_SDK_CUSTOM_HPP__ ends
