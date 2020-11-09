@@ -25,13 +25,13 @@ public:
         slen = min(slen, max_function_name_len);
         memory_copy(func_name, name, slen);
         name[slen] = 0;
-        log("%s +", name);
+        log("%s+", name);
     }
 
     ~auto_trace() noexcept
     {
         u64 duration = tick_elapse() - start_time;
-        log("%s - [%ullms]", name, duration);
+        log("%s- [%ullms]", name, duration);
     }
 
 private:

@@ -966,7 +966,7 @@ protected:
         return ptr;
     }
 
-    Node_Ty *_peek_node(const Key_Ty &k) noexcept
+    Node_Ty *_peek_node(const Key_Ty &k) const noexcept
     {
         assert(sz >= 0);
         if (sz == 0)

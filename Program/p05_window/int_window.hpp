@@ -16,6 +16,8 @@
 namespace dxt
 {
 
+class window;
+
 enum class window_event_type : s64
 {
     reserved = -1,
@@ -36,100 +38,122 @@ enum class window_event_type : s64
     number //# reserved for counting
 };
 
+static const char *window_event_type_cstr[(u64)window_event_type::number] =
+{
+    "window_close",
+    "window_resize",
+
+    "mouse_press",
+    "mouse_release",
+    "mouse_repeat",
+    "mouse_move",
+    "mouse_scroll",
+
+    "key_press",
+    "key_release",
+    "key_repeat"
+};
+
 class window_event
 {
 public:
-    window_event() {}
+    window_event(window *w) : m_wnd(w) {}
     virtual ~window_event() {}
-    virtual window_event_type Type() { return window_event_type::reserved; }
+    virtual window_event_type Type() const { return window_event_type::reserved; }
+
+    window *GetWindow() { return m_wnd; }
+
+protected:
+    window *m_wnd;
 };
 
 class window_close : public window_event
 {
 public:
-    window_close() {}
+    window_close(window *w) : window_event(w) {}
     ~window_close() override {}
-    window_event_type Type() override { return window_event_type::window_close; }
+    window_event_type Type() const override { return window_event_type::window_close; }
 };
 
 class window_resize : public window_event
 {
 public:
-    window_resize() {}
+    window_resize(window *w) : window_event(w) {}
     ~window_resize() override {}
-    window_event_type Type() override { return window_event_type::window_resize; }
+    window_event_type Type() const override { return window_event_type::window_resize; }
 };
 
 class mouse_press : public window_event
 {
 public:
-    mouse_press() {}
+    mouse_press(window *w) : window_event(w) {}
     ~mouse_press() override {}
-    window_event_type Type() override { return window_event_type::mouse_press; }
+    window_event_type Type() const override { return window_event_type::mouse_press; }
 };
 
 class mouse_release : public window_event
 {
 public:
-    mouse_release() {}
+    mouse_release(window *w) : window_event(w) {}
     ~mouse_release() override {}
-    window_event_type Type() override { return window_event_type::mouse_release; }
+    window_event_type Type() const override { return window_event_type::mouse_release; }
 };
 
 class mouse_repeat : public window_event
 {
 public:
-    mouse_repeat() {}
+    mouse_repeat(window *w) : window_event(w) {}
     ~mouse_repeat() override {}
-    window_event_type Type() override { return window_event_type::mouse_repeat; }
+    window_event_type Type() const override { return window_event_type::mouse_repeat; }
 };
 
 class mouse_move : public window_event
 {
 public:
-    mouse_move() {}
+    mouse_move(window *w) : window_event(w) {}
     ~mouse_move() override {}
-    window_event_type Type() override { return window_event_type::mouse_move; }
+    window_event_type Type() const override { return window_event_type::mouse_move; }
 };
 
 class mouse_scroll : public window_event
 {
 public:
-    mouse_scroll() {}
+    mouse_scroll(window *w) : window_event(w) {}
     ~mouse_scroll() override {}
-    window_event_type Type() override { return window_event_type::mouse_scroll; }
+    window_event_type Type() const override { return window_event_type::mouse_scroll; }
 };
 
 class key_press : public window_event
 {
 public:
-    key_press() {}
+    key_press(window *w) : window_event(w) {}
     ~key_press() override {}
-    window_event_type Type() override { return window_event_type::key_press; }
+    window_event_type Type() const override { return window_event_type::key_press; }
 };
 
 class key_release : public window_event
 {
 public:
-    key_release() {}
+    key_release(window *w) : window_event(w) {}
     ~key_release() override {}
-    window_event_type Type() override { return window_event_type::key_release; }
+    window_event_type Type() const override { return window_event_type::key_release; }
 };
 
 class key_repeat : public window_event
 {
 public:
-    key_repeat() {}
+    key_repeat(window *w) : window_event(w) {}
     ~key_repeat() override {}
-    window_event_type Type() override { return window_event_type::key_repeat; }
+    window_event_type Type() const override { return window_event_type::key_repeat; }
 };
 
-typedef void WindowEventCbFunc(window_event *evnt);
+typedef void WindowEventCbFunc(const window_event &evnt);
 
 struct window_desc
 {
     std::string name;
-    s64 width, height;
+    s64 width;
+    s64 height;
     WindowEventCbFunc *cb;
 };
 
@@ -140,7 +164,9 @@ public:
         m_desc(desc)
     {}
 
-    ~window() {}
+    virtual ~window() {}
+
+    window_desc *GetWindowDesc() { return &m_desc; }
 
 protected:
     window_desc m_desc;
